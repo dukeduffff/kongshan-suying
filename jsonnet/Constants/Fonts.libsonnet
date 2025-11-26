@@ -17,8 +17,8 @@
   systemButtonImageFontSize: 20,
 
   // 键盘上的辅助文字，例如上划和下划提示
-  alternativeTextFontSize: 8,
-  alternativeImageFontSize: 8,
+  alternativeTextFontSize: 10,
+  alternativeImageFontSize: 9,
 
   hintTextFontSize: 26,
 
