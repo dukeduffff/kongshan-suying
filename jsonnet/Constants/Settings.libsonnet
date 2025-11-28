@@ -3,6 +3,11 @@
   // true 左移半格，false 不左移
   usePCLayout: true,
 
+  // 输入时空格键上的内容，支持固定内容和变量，变量可选如下：
+  // $rimeCandidateComment 显示第一个候选词的注释
+  // $rimeCandidate 显示第一个候选词
+  spaceButtonComposingText: '$rimeCandidate',
+
   // 是否在空格键上显示方案名称
   // true 显示方案名称，false 不显示
   spaceButtonShowSchema: true,
