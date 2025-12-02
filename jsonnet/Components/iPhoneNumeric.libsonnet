@@ -1,4 +1,5 @@
 local params = import '../Constants/Keyboard.libsonnet';
+local fonts = import '../Constants/Fonts.libsonnet';
 local basicStyle = import 'BasicStyle.libsonnet';
 local preedit = import 'Preedit.libsonnet';
 local toolbar = import 'Toolbar.libsonnet';
@@ -145,7 +146,9 @@ local newKeyLayout(isDark=false, isPortrait=false) =
       basicStyle.newAlphabeticButton(
         button.name,
         isDark,
-        button.params + hintStyle
+        button.params + hintStyle + {
+          fontSize: fonts.numericButtonTextFontSize,
+        }
       ),
     params.keyboard.numericButtons,
     {})

@@ -13,6 +13,8 @@
   standardButtonUppercasedTextFontSize: 22.5,
   standardButtonImageFontSize: 20,
 
+  numericButtonTextFontSize: 22.5,
+
   systemButtonTextFontSize: 16,
   systemButtonImageFontSize: 20,
 
