@@ -1,6 +1,5 @@
 local iPhoneNumeric = import 'Components/iPhoneNumeric.libsonnet';
 local iPhonePinyin = import 'Components/iPhonePinyin.libsonnet';
-local iPhoneSymbolic = import 'Components/iPhoneSymbolic.libsonnet';
 local iPadPinyin = import 'Components/iPadPinyin.libsonnet';
 local iPadNumeric = import 'Components/iPadNumeric.libsonnet';
 local panel = import 'Components/Panel.libsonnet';
@@ -20,14 +19,6 @@ local darkNumericPortraitFileContent = iPhoneNumeric.new(isDark=true, isPortrait
 local numericLandscapeName = 'numericLandscape';
 local lightNumericLandscapeFileContent = iPhoneNumeric.new(isDark=false, isPortrait=false);
 local darkNumericLandscapeFileContent = iPhoneNumeric.new(isDark=true, isPortrait=false);
-
-local symbolicPortraitFileName = 'symbolicPortrait';
-local lightSymbolicPortraitFileContent = iPhoneSymbolic.new(isDark=false, isPortrait=true);
-local darkSymbolicPortraitFileContent = iPhoneSymbolic.new(isDark=true, isPortrait=true);
-
-local symbolicLandscapeName = 'symbolicLandscape';
-local lightSymbolicLandscapeFileContent = iPhoneSymbolic.new(isDark=false, isPortrait=false);
-local darkSymbolicLandscapeFileContent = iPhoneSymbolic.new(isDark=true, isPortrait=false);
 
 local iPadPinyinPortraitName = 'iPadPinyinPortrait';
 local lightIpadPinyinPortraitContent = iPadPinyin.new(isDark=false, isPortrait=true);
@@ -77,19 +68,6 @@ local config = {
     },
   },
 
-  // 符号键盘
-  symbolic: {
-    iPhone: {
-      portrait: symbolicPortraitFileName,
-      landscape: symbolicLandscapeName,
-    },
-    iPad: {
-      portrait: iPadPinyinPortraitName,
-      landscape: iPadPinyinLandscapeName,
-      floating: symbolicPortraitFileName,
-    },
-  },
-
   // 浮动键盘面板
   panel: {
     iPhone: {
@@ -128,12 +106,6 @@ function(debug=false)
   ['dark/' + numericPortraitFileName + '.yaml']: toString(darkNumericPortraitFileContent),
   ['light/' + numericLandscapeName + '.yaml']: toString(lightNumericLandscapeFileContent),
   ['dark/' + numericLandscapeName + '.yaml']: toString(darkNumericLandscapeFileContent),
-
-  // 符号键盘
-  ['light/' + symbolicPortraitFileName + '.yaml']: toString(lightSymbolicPortraitFileContent),
-  ['dark/' + symbolicPortraitFileName + '.yaml']: toString(darkSymbolicPortraitFileContent),
-  ['light/' + symbolicLandscapeName + '.yaml']: toString(lightSymbolicLandscapeFileContent),
-  ['dark/' + symbolicLandscapeName + '.yaml']: toString(darkSymbolicLandscapeFileContent),
 
   // iPad 拼音键盘
   ['light/' + iPadPinyinPortraitName + '.yaml']: toString(lightIpadPinyinPortraitContent),

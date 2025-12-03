@@ -270,6 +270,30 @@ local settings = import '../Constants/Settings.libsonnet';
         text: '皮肤开发',
       },
     },
+    toolbarKeyboardNumericButton: {
+      name: 'toolbarKeyboardNumericButton',
+      params: {
+        action: { keyboardType: 'numeric', },
+        systemImageName: 'numbers.rectangle',
+        text: '数字键盘',
+      },
+    },
+    toolbarKeyboardSymbolicButton: {
+      name: 'toolbarKeyboardSymbolicButton',
+      params: {
+        action: { keyboardType: 'symbolic', },
+        systemImageName: 'number',
+        text: '符号键盘',
+      },
+    },
+    toolbarKeyboardEmojiButton: {
+      name: 'toolbarKeyboardEmojiButton',
+      params: {
+        action: { keyboardType: 'emojis', },
+        systemImageName: 'face.dashed',
+        text: '表情键盘',
+      },
+    },
   },
 
   keyboard: {
@@ -709,7 +733,8 @@ local settings = import '../Constants/Settings.libsonnet';
       params: {
         action: { keyboardType: 'numeric' },
         text: '123',
-        swipeUp: { action: { keyboardType: 'emojis' } },
+        swipeUp: { action: { keyboardType: 'symbolic' } },
+        swipeDown: { action: { keyboardType: 'emojis' } },
       },
     },
 
@@ -734,6 +759,14 @@ local settings = import '../Constants/Settings.libsonnet';
       params: {
         action: 'returnLastKeyboard',
         systemImageName: 'arrow.uturn.backward',
+      },
+    },
+
+    gotoPrimaryKeyboardButton: {
+      name: 'gotoPrimaryKeyboardButton',
+      params: {
+        action: 'returnPrimaryKeyboard',
+        systemImageName: 'arrow.backward',
       },
     },
 
@@ -958,6 +991,12 @@ local settings = import '../Constants/Settings.libsonnet';
       params: {
         action: { character: '=' },
         swipeUp: { action: { character: '+' } },
+      },
+    },
+    numericEqualButton: {
+      name: 'numericEqualButton',
+      params: {
+        action: { symbol: '=' },
       },
     },
     leftBracketButton: {

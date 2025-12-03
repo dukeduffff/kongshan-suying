@@ -79,7 +79,7 @@ local numericKeyboardLayout = {
         style: numericSideColumnStyleName,
         subviews: [
           { Cell: collection.name, },
-          { Cell: params.keyboard.goBackButton.name, },
+          { Cell: params.keyboard.gotoPrimaryKeyboardButton.name, },
         ],
       },
     },
@@ -90,7 +90,7 @@ local numericKeyboardLayout = {
           { Cell: params.keyboard.oneButton.name, },
           { Cell: params.keyboard.fourButton.name, },
           { Cell: params.keyboard.sevenButton.name, },
-          { Cell: params.keyboard.symbolicButton.name, },
+          { Cell: params.keyboard.numericSpaceButton.name, },
         ],
       },
     },
@@ -121,7 +121,7 @@ local numericKeyboardLayout = {
         style: numericSideColumnStyleName,
         subviews: [
           { Cell: params.keyboard.backspaceButton.name, },
-          { Cell: params.keyboard.numericSpaceButton.name, },
+          { Cell: params.keyboard.numericEqualButton.name, },
           { Cell: params.keyboard.numericColonButton.name, },
           { Cell: params.keyboard.enterButton.name, },
         ],
@@ -168,11 +168,11 @@ local newKeyLayout(isDark=false, isPortrait=false) =
         button.params
       ),
     [
-      params.keyboard.goBackButton,
-      params.keyboard.symbolicButton,
+      params.keyboard.gotoPrimaryKeyboardButton,
+      params.keyboard.numericSpaceButton,
       params.keyboard.dotButton,
       params.keyboard.backspaceButton,
-      params.keyboard.numericSpaceButton,
+      params.keyboard.numericEqualButton,
       params.keyboard.numericColonButton,
       params.keyboard.enterButton,
     ],

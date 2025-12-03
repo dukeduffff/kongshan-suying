@@ -216,6 +216,9 @@ local toolbarButtonNames = [
   keyboardParams.toolbarButton.toolbarLeftHandButton.name, // 左手模式
   keyboardParams.toolbarButton.toolbarRightHandButton.name, // 右手模式
   keyboardParams.toolbarButton.toolbarSchemaSelectorButton.name, // 方案切换
+  keyboardParams.toolbarButton.toolbarKeyboardNumericButton.name, // 数字键盘
+  keyboardParams.toolbarButton.toolbarKeyboardSymbolicButton.name, // 符号键盘
+  keyboardParams.toolbarButton.toolbarKeyboardEmojiButton.name, // 表情键盘
 ];
 
 local slideButtons = [
