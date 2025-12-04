@@ -1,3 +1,56 @@
+local settings = import 'Settings.libsonnet';
+
+// 颜色对比度计算函数
+// 将十六进制颜色转换为 RGB 值
+local hexToRgb(hex) =
+  local cleanHex = if std.startsWith(hex, '#') then std.substr(hex, 1, std.length(hex) - 1) else hex;
+  local r = std.parseHex(std.substr(cleanHex, 0, 2));
+  local g = std.parseHex(std.substr(cleanHex, 2, 2));
+  local b = std.parseHex(std.substr(cleanHex, 4, 2));
+  { r: r, g: g, b: b };
+
+// 计算相对亮度（Relative Luminance）
+local getRelativeLuminance(rgb) =
+  local normalize(channel) =
+    local c = channel / 255.0;
+    if c <= 0.03928 then
+      c / 12.92
+    else
+      std.pow((c + 0.055) / 1.055, 2.4);
+
+  local rLin = normalize(rgb.r);
+  local gLin = normalize(rgb.g);
+  local bLin = normalize(rgb.b);
+
+  0.2126 * rLin + 0.7152 * gLin + 0.0722 * bLin;
+
+// 计算两个颜色的对比度
+local getContrastRatio(lum1, lum2) =
+  local lighter = if lum1 > lum2 then lum1 else lum2;
+  local darker = if lum1 > lum2 then lum2 else lum1;
+  (lighter + 0.05) / (darker + 0.05);
+
+// 选择对比度更高的前景色
+// bgColor: 背景颜色（十六进制字符串）
+// fgColor1, fgColor2: 两个候选前景色（十六进制字符串）
+// 返回对比度更高的那个颜色
+local selectBetterForeground(bgColor, fgColor1, fgColor2) =
+  local lumbg = getRelativeLuminance(hexToRgb(bgColor));
+  local lum1 = getRelativeLuminance(hexToRgb(fgColor1));
+  local lum2 = getRelativeLuminance(hexToRgb(fgColor2));
+  local color1 = { lum: lum1, color: fgColor1 };
+  local color2 = { lum: lum2, color: fgColor2 };
+  local lighter = if lum1 > lum2 then color1 else color2;
+  local darker = if lum1 > lum2 then color2 else color1;
+  local contrast1 = getContrastRatio(lumbg, lighter.lum);
+  local easyToReadContrast = 2;
+  if contrast1 > easyToReadContrast then
+    lighter.color
+  else
+    local contrast2 = getContrastRatio(lumbg, darker.lum);
+    if contrast1 > contrast2 then lighter.color else darker.color;
+
+
 // 标签颜色常量定义
 local labelColor = {
   primary: {
@@ -73,19 +126,53 @@ local systemButtonForegroundColor = labelColor.primary;
 
 local systemButtonHighlightedForegroundColor = systemButtonForegroundColor;
 
-local blueButtonBackgroundColor = {
-  light: '#007AFF',
-  dark: '#1162ff',
+local accentColors = {
+  red: {
+    light: '#FF3B30',
+    dark: '#ff453a',
+  },
+  green: {
+    light: '#34C759',
+    dark: '#30d158',
+  },
+  yellow: {
+    light: '#FFCC00',
+    dark: '#ffd60a',
+  },
+  blue: {
+    light: '#007AFF',
+    dark: '#1162ff',
+  },
+  purple: {
+    light: '#AF52DE',
+    dark: '#bf5af2',
+  },
+  cyan: {
+    light: '#5AC8FA',
+    dark: '#64d2ff',
+  },
 };
 
-local blueButtonHighlightedBackgroundColor = systemButtonHighlightedBackgroundColor;
+// MARK: 一定要与 Settings.libsonnet 中的 accentColor 编号对应
+local accentColorList = [
+  accentColors.red,
+  accentColors.green,
+  accentColors.yellow,
+  accentColors.blue,
+  accentColors.purple,
+  accentColors.cyan,
+];
 
-local blueButtonForegroundColor = {
-  light: '#FFFFFF',
-  dark: '#FFFFFF',
-};
+local colorButtonBackgroundColor = if settings.accentColor == 0 then systemButtonBackgroundColor else
+  accentColorList[settings.accentColor - 1];
+local colorButtonForegroundColor = if settings.accentColor == 0 then systemButtonForegroundColor else
+  {
+    light: selectBetterForeground(colorButtonBackgroundColor.light, labelColor.primary.light, labelColor.primary.dark),
+    dark: selectBetterForeground(colorButtonBackgroundColor.dark, labelColor.primary.light, labelColor.primary.dark),
+  };
 
-local blueButtonHighlightedForegroundColor = {
+local colorButtonHighlightedBackgroundColor = systemButtonHighlightedBackgroundColor;
+local colorButtonHighlightedForegroundColor = {
   light: labelColor.primary.light,
   dark: labelColor.primary.dark,
 };
@@ -114,7 +201,7 @@ local standardCalloutHighlightedForegroundColor = {
 };
 
 // 标准按键 Hint 选中背景色，如长按符号列表中选中的符号背景色
-local standardCalloutSelectedBackgroundColor = blueButtonBackgroundColor;
+local standardCalloutSelectedBackgroundColor = colorButtonBackgroundColor;
 
 // 标准按键 Hint 边框颜色
 local standardCalloutBorderColor = {
@@ -154,10 +241,10 @@ local candidateSeparatorColor = separatorColor;
   systemButtonHighlightedBackgroundColor: systemButtonHighlightedBackgroundColor,
   systemButtonForegroundColor: systemButtonForegroundColor,
   systemButtonHighlightedForegroundColor: systemButtonHighlightedForegroundColor,
-  blueButtonBackgroundColor: blueButtonBackgroundColor,
-  blueButtonHighlightedBackgroundColor: blueButtonHighlightedBackgroundColor,
-  blueButtonForegroundColor: blueButtonForegroundColor,
-  blueButtonHighlightedForegroundColor: blueButtonHighlightedForegroundColor,
+  colorButtonBackgroundColor: colorButtonBackgroundColor,
+  colorButtonHighlightedBackgroundColor: colorButtonHighlightedBackgroundColor,
+  colorButtonForegroundColor: colorButtonForegroundColor,
+  colorButtonHighlightedForegroundColor: colorButtonHighlightedForegroundColor,
   lowerEdgeOfButtonNormalColor: lowerEdgeOfButtonNormalColor,
   lowerEdgeOfButtonHighlightColor: lowerEdgeOfButtonHighlightColor,
   standardCalloutBackgroundColor: standardCalloutBackgroundColor,

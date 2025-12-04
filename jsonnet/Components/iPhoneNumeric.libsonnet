@@ -168,7 +168,6 @@ local newKeyLayout(isDark=false, isPortrait=false) =
         button.params
       ),
     [
-      params.keyboard.gotoPrimaryKeyboardButton,
       params.keyboard.numericSpaceButton,
       params.keyboard.dotButton,
       params.keyboard.backspaceButton,
@@ -176,7 +175,14 @@ local newKeyLayout(isDark=false, isPortrait=false) =
       params.keyboard.numericColonButton,
       params.keyboard.enterButton,
     ],
-    {});
+    basicStyle.newSystemButton(
+        params.keyboard.gotoPrimaryKeyboardButton.name,
+        isDark,
+        params.keyboard.gotoPrimaryKeyboardButton.params + {
+          backgroundStyle: basicStyle.colorButtonBackgroundStyleName,
+          foregroundStyle: params.keyboard.gotoPrimaryKeyboardButton.name + basicStyle.colorButtonForegroundStyleName,
+        }
+      ));
 
 {
   new(isDark, isPortrait):
@@ -192,8 +198,9 @@ local newKeyLayout(isDark=false, isPortrait=false) =
     + basicStyle.newAlphabeticButtonBackgroundStyle(isDark, extraParams)
     + basicStyle.newAlphabeticButtonHintStyle(isDark)
     + basicStyle.newSystemButtonBackgroundStyle(isDark, extraParams)
-    + basicStyle.newBlueButtonBackgroundStyle(isDark, extraParams)
-    + basicStyle.newBlueButtonForegroundStyle(isDark, params.keyboard.enterButton.params)
+    + basicStyle.newColorButtonBackgroundStyle(isDark, extraParams)
+    + basicStyle.newColorButtonForegroundStyle(isDark, params=params.keyboard.enterButton.params)
+    + basicStyle.newColorButtonForegroundStyle(isDark, params=params.keyboard.gotoPrimaryKeyboardButton.params, namePrefix=params.keyboard.gotoPrimaryKeyboardButton.name)
     + basicStyle.newAlphabeticHintBackgroundStyle(isDark, { cornerRadius: 10 })
     + newKeyLayout(isDark, isPortrait)
     + basicStyle.newEnterButtonForegroundStyle(isDark, params.keyboard.enterButton.params)

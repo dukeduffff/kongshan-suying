@@ -223,27 +223,37 @@ local spaceButtonForegroundStyle = [
   else []
   );
 
-// 蓝色功能键按钮背景样式
-local blueButtonBackgroundStyleName = 'blueButtonBackgroundStyle';
-local newBlueButtonBackgroundStyle(isDark=false, params={}) = {
-  [blueButtonBackgroundStyleName]: utils.newGeometryStyle({
+// 彩色功能键按钮背景样式
+local colorButtonBackgroundStyleName = 'colorButtonBackgroundStyle';
+local newColorButtonBackgroundStyle(isDark=false, params={}) = {
+  [colorButtonBackgroundStyleName]: utils.newGeometryStyle({
     insets: keyboardParams.keyboard.button.backgroundInsets.iPhone.portrait,
-    normalColor: colors.blueButtonBackgroundColor,
-    highlightColor: colors.blueButtonHighlightedBackgroundColor,
+    normalColor: colors.colorButtonBackgroundColor,
+    highlightColor: colors.colorButtonHighlightedBackgroundColor,
     cornerRadius: buttonCornerRadius,
     normalLowerEdgeColor: colors.lowerEdgeOfButtonNormalColor,
     highlightLowerEdgeColor: colors.lowerEdgeOfButtonHighlightColor,
   } + params, isDark),
 };
 
-local blueButtonForegroundStyleName = 'blueButtonForegroundStyle';
-local newBlueButtonForegroundStyle(isDark=false, params={}) = {
-  [blueButtonForegroundStyleName]: utils.newTextStyle({
-    normalColor: colors.blueButtonForegroundColor,
-    highlightColor: colors.blueButtonHighlightedForegroundColor,
-    fontSize: fonts.systemButtonTextFontSize,
-  } + params, isDark) + getKeyboardActionText(params),
-};
+local colorButtonForegroundStyleName = 'colorButtonForegroundStyle';
+local newColorButtonForegroundStyle(isDark=false, params={}, namePrefix='') =
+  if std.objectHas(params, 'systemImageName') then
+    {
+      [namePrefix+colorButtonForegroundStyleName]: utils.newSystemImageStyle({
+        normalColor: colors.colorButtonForegroundColor,
+        highlightColor: colors.colorButtonHighlightedForegroundColor,
+        fontSize: fonts.systemButtonImageFontSize,
+      } + params, isDark)
+    }
+  else
+    {
+      [namePrefix+colorButtonForegroundStyleName]: utils.newTextStyle({
+        normalColor: colors.colorButtonForegroundColor,
+        highlightColor: colors.colorButtonHighlightedForegroundColor,
+        fontSize: fonts.systemButtonTextFontSize,
+      } + params, isDark) + getKeyboardActionText(params),
+    };
 
 local enterButtonBackgroundStyle = [
   {
@@ -252,7 +262,7 @@ local enterButtonBackgroundStyle = [
     conditionValue: [0, 2, 3, 5, 6, 8, 11],
   },
   {
-    styleName: blueButtonBackgroundStyleName,
+    styleName: colorButtonBackgroundStyleName,
     conditionKey: '$returnKeyType',
     conditionValue: [1, 4, 7, 9, 10],
   },
@@ -265,7 +275,7 @@ local enterButtonForegroundStyle = [
     conditionValue: [0, 2, 3, 5, 6, 8, 11],
   },
   {
-    styleName: blueButtonForegroundStyleName,
+    styleName: colorButtonForegroundStyleName,
     conditionKey: '$returnKeyType',
     conditionValue: [1, 4, 7, 9, 10],
   },
@@ -598,7 +608,7 @@ local newSymbolicCollection(name, isDark=false, params={}) =
     [name + 'CellForegroundStyle']: utils.newTextStyle({
       normalColor: colors.systemButtonForegroundColor,
       highlightColor: colors.systemButtonHighlightedForegroundColor,
-      fontSize: fonts.systemButtonTextFontSize,
+      fontSize: fonts.numericCollectionTextFontSize,
     } + params, isDark),
   };
 
@@ -631,8 +641,8 @@ local returnKeyboardTypeChangedNotification = {
   returnKeyTypeChangedNotification: {
     notificationType: 'returnKeyType',
     returnKeyType: [1, 4, 7],
-    backgroundStyle: blueButtonBackgroundStyleName,
-    foregroundStyle: blueButtonForegroundStyleName,
+    backgroundStyle: colorButtonBackgroundStyleName,
+    foregroundStyle: colorButtonForegroundStyleName,
   },
 };
 
@@ -687,11 +697,11 @@ local newCommitCandidateForegroundStyle(isDark=false, params={}) = {
   systemButtonBackgroundStyleName: systemButtonBackgroundStyleName,
   newSystemButtonBackgroundStyle: newSystemButtonBackgroundStyle,
 
-  blueButtonBackgroundStyleName: blueButtonBackgroundStyleName,
-  newBlueButtonBackgroundStyle: newBlueButtonBackgroundStyle,
+  colorButtonBackgroundStyleName: colorButtonBackgroundStyleName,
+  newColorButtonBackgroundStyle: newColorButtonBackgroundStyle,
 
-  blueButtonForegroundStyleName: blueButtonForegroundStyleName,
-  newBlueButtonForegroundStyle: newBlueButtonForegroundStyle,
+  colorButtonForegroundStyleName: colorButtonForegroundStyleName,
+  newColorButtonForegroundStyle: newColorButtonForegroundStyle,
 
   newTextSystemButtonForegroundStyle: newTextSystemButtonForegroundStyle,
   newImageSystemButtonForegroundStyle: newImageSystemButtonForegroundStyle,
