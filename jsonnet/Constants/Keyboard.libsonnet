@@ -290,7 +290,7 @@ local settings = import '../Constants/Settings.libsonnet';
       name: 'toolbarKeyboardEmojiButton',
       params: {
         action: { keyboardType: 'emojis', },
-        systemImageName: 'face.dashed',
+        systemImageName: 'face.smiling.inverse',
         text: '表情键盘',
       },
     },
@@ -713,6 +713,7 @@ local settings = import '../Constants/Settings.libsonnet';
         action: 'enter',
         swipeDown: { action: { shortcut: '#换行' } },
         text: '$returnKeyType',
+        center: {x: 0.5, y: 0.45 },
         notification: [
           'returnKeyTypeChangedNotification',
           'preeditChangedForEnterButtonNotification',

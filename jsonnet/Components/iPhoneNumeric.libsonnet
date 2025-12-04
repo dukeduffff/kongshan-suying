@@ -131,7 +131,7 @@ local numericKeyboardLayout = {
 };
 
 
-local newKeyLayout(isDark=false, isPortrait=false) =
+local newKeyLayout(isDark=false, isPortrait=false, extraParams={}) =
 
   local keyboardHeight = if isPortrait then params.keyboard.height.iPhone.portrait else params.keyboard.height.iPhone.landscape;
 
@@ -157,7 +157,7 @@ local newKeyLayout(isDark=false, isPortrait=false) =
   + basicStyle.newSymbolicCollection(
     collection.name,
     isDark,
-    collection.params
+    collection.params + extraParams
   )
   + newSymbols(collection.params.useRimeEngine)
   + std.foldl(
@@ -202,7 +202,7 @@ local newKeyLayout(isDark=false, isPortrait=false) =
     + basicStyle.newColorButtonForegroundStyle(isDark, params=params.keyboard.enterButton.params)
     + basicStyle.newColorButtonForegroundStyle(isDark, params=params.keyboard.gotoPrimaryKeyboardButton.params, namePrefix=params.keyboard.gotoPrimaryKeyboardButton.name)
     + basicStyle.newAlphabeticHintBackgroundStyle(isDark, { cornerRadius: 10 })
-    + newKeyLayout(isDark, isPortrait)
+    + newKeyLayout(isDark, isPortrait, extraParams)
     + basicStyle.newEnterButtonForegroundStyle(isDark, params.keyboard.enterButton.params)
     + basicStyle.newCommitCandidateForegroundStyle(isDark, { text: '选定' })
     // Notifications
