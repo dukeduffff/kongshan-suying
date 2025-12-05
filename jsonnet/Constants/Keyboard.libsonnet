@@ -94,7 +94,7 @@ local settings = import '../Constants/Settings.libsonnet';
       landscape: { x: 0.45, y: 0.8 },
     },
     insets: {
-      top: 12,
+      top: 10,
       left: 12,
       bottom: 10,
       right: 12,

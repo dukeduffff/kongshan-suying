@@ -2,7 +2,7 @@
   preeditFontSize: 17,
 
   floatingKeyboardButtonTextFontSize: 14,
-  floatingKeyboardButtonImageFontSize: 16,
+  floatingKeyboardButtonImageFontSize: 20,
 
   toolbarButtonTextFontSize: 16,
   toolbarButtonImageFontSize: 20,
