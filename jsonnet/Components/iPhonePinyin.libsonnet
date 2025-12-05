@@ -133,10 +133,7 @@ local newKeyLayout(isDark=false, isPortrait=true) =
     (
       if settings.usePCLayout then
       {
-        size:
-          { width: '225/1125' },
-        bounds:
-          { width: '200/225', alignment: 'right' },
+        size: { width: '225/1125' },
       }
       else
       {
