@@ -1266,5 +1266,21 @@ local settings = import '../Constants/Settings.libsonnet';
         action: { symbol: '」' },
       },
     },
+
+    // 数字键盘符号列表
+    numericSymbolsCollection: {
+      name: 'numericSymbolsCollection',
+      params: {
+        type: 'numericSymbols',
+      },
+    },
+
+    // 数字键盘横向时全部部分视图
+    numericCategorySymbolCollection: {
+      name: 'numericCategorySymbolCollection',
+      params: {
+        type: 'categorySymbols',
+      },
+    },
   },
 }

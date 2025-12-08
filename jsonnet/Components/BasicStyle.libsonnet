@@ -556,7 +556,6 @@ local newSymbolicCollection(name, isDark=false, params={}) =
                 'size',
                 'insets',
                 'dataSource',
-                'useRimeEngine',
               ]
             ),
     [name + 'CellStyle']:

@@ -10,76 +10,47 @@ local backgroundInsets = {
   landscape: { top: 3, left: 3, bottom: 3, right: 3 },
 };
 
-local chineseSymbolicOffset = {
-  center: { x: 0.65 },
-};
-
-local getSymbol(symbol, useRimeEngine=false, alias='') =
-  local label = if std.length(alias) == 0 then symbol else alias;
-  {
-    label: label,
-    action: {
-      [if useRimeEngine then 'character' else 'symbol']: symbol
+// 窄 VStack 宽度样式
+local narrowVStackStyle = {
+  local this = self,
+  name: 'narrowVStackStyle',
+  style: {
+    [this.name]: {
+      size: {
+        width: { percentage: 0.17 },
+      },
     },
-  };
-
-local symbolsName = 'symbols';
-local newSymbols(useRimeEngine=false) = {
-  [symbolsName]: [
-    getSymbol('+', useRimeEngine),
-    getSymbol('-', useRimeEngine),
-    getSymbol('*', useRimeEngine, '×'),
-    getSymbol('/', useRimeEngine),
-    getSymbol('|', useRimeEngine),
-    getSymbol('(', useRimeEngine),
-    getSymbol(')', useRimeEngine),
-    getSymbol('%', useRimeEngine),
-    getSymbol('^', useRimeEngine),
-    getSymbol('&', useRimeEngine),
-    getSymbol('!', useRimeEngine),
-    getSymbol('>', useRimeEngine),
-    getSymbol('<', useRimeEngine),
-    getSymbol('{', useRimeEngine),
-    getSymbol('}', useRimeEngine),
-    getSymbol('[', useRimeEngine),
-    getSymbol(']', useRimeEngine),
-    getSymbol('~', useRimeEngine),
-    ],
+  },
 };
 
-local collection = {
-  name: 'collection',
-  params: {
-    type: 'symbols',
-    size: { height: '3/4' },
-    dataSource: symbolsName,
-    useRimeEngine: false, // 是否使用 Rime 引擎处理符号
-  }
+// 宽 VStack 宽度样式
+local wideVStackStyle = {
+  local this = self,
+  name: 'wideVStackStyle',
+  style: {
+    [this.name]: {
+      size: {
+        width: { percentage: 0.22 },
+      },
+    },
+  },
 };
 
-local numericSideColumnStyleName = 'numericSideColumnStyle';
-local numericMiddleColumnStyleName = 'numericMiddleColumnStyle';
-
+// 9 键布局
 local numericKeyboardLayout = {
-  [numericSideColumnStyleName]: {
-    size: { width: '29/183' },
-  },
-  [numericMiddleColumnStyleName]: {
-    size: { width: '125/549' },
-  },
   keyboardLayout: [
     {
       VStack: {
-        style: numericSideColumnStyleName,
+        style: narrowVStackStyle.name,
         subviews: [
-          { Cell: collection.name, },
+          { Cell: params.keyboard.numericSymbolsCollection.name, },
           { Cell: params.keyboard.gotoPrimaryKeyboardButton.name, },
         ],
       },
     },
     {
       VStack: {
-        style: numericMiddleColumnStyleName,
+        style: wideVStackStyle.name,
         subviews: [
           { Cell: params.keyboard.oneButton.name, },
           { Cell: params.keyboard.fourButton.name, },
@@ -90,7 +61,7 @@ local numericKeyboardLayout = {
     },
     {
       VStack: {
-        style: numericMiddleColumnStyleName,
+        style: wideVStackStyle.name,
         subviews: [
           { Cell: params.keyboard.twoButton.name, },
           { Cell: params.keyboard.fiveButton.name, },
@@ -101,7 +72,7 @@ local numericKeyboardLayout = {
     },
     {
       VStack: {
-        style: numericMiddleColumnStyleName,
+        style: wideVStackStyle.name,
         subviews: [
           { Cell: params.keyboard.threeButton.name, },
           { Cell: params.keyboard.sixButton.name, },
@@ -112,7 +83,7 @@ local numericKeyboardLayout = {
     },
     {
       VStack: {
-        style: numericSideColumnStyleName,
+        style: narrowVStackStyle.name,
         subviews: [
           { Cell: params.keyboard.backspaceButton.name, },
           { Cell: params.keyboard.numericEqualButton.name, },
@@ -150,11 +121,10 @@ local newKeyLayout(isDark=false, isPortrait=false, extraParams={}) =
 
   // First Column
   + basicStyle.newSymbolicCollection(
-    collection.name,
+    params.keyboard.numericSymbolsCollection.name,
     isDark,
-    collection.params + extraParams
+    params.keyboard.numericSymbolsCollection.params + extraParams
   )
-  + newSymbols(collection.params.useRimeEngine)
   + std.foldl(
     function(acc, button) acc +
       basicStyle.newSystemButton(
@@ -174,6 +144,7 @@ local newKeyLayout(isDark=false, isPortrait=false, extraParams={}) =
         params.keyboard.gotoPrimaryKeyboardButton.name,
         isDark,
         params.keyboard.gotoPrimaryKeyboardButton.params + {
+          size: { height: '1/4' },
           backgroundStyle: basicStyle.colorButtonBackgroundStyleName,
           foregroundStyle: params.keyboard.gotoPrimaryKeyboardButton.name + basicStyle.colorButtonForegroundStyleName,
         }
@@ -189,6 +160,8 @@ local newKeyLayout(isDark=false, isPortrait=false, extraParams={}) =
 
     preedit.new(isDark)
     + toolbar.new(isDark)
+    + narrowVStackStyle.style
+    + wideVStackStyle.style
     + basicStyle.newKeyboardBackgroundStyle(isDark)
     + basicStyle.newAlphabeticButtonBackgroundStyle(isDark, extraParams)
     + basicStyle.newAlphabeticButtonHintStyle(isDark)
