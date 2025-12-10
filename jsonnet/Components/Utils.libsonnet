@@ -175,6 +175,30 @@ local newRowKeyboardLayout(rows) = {
   ],
 };
 
+// ascii mode 变化时生成 notification 及 foreground style
+local asciiModeForegroundStyleName(name, value) =
+  name + 'AsciiMode' + (if value then 'On' else 'Off') + 'ForegroundStyle';
+local newAsciiModeForegroundStyle(name, foregroundOff, foregroundOn) = {
+  [asciiModeForegroundStyleName(name, true)]: foregroundOn,
+  [asciiModeForegroundStyleName(name, false)]: foregroundOff,
+};
+
+local asciiModeChangedNotificationName(name, value) =
+  name + 'AsciiMode' + (if value then 'On' else 'Off') + 'Notification';
+
+local newAsciiModeChangedNotification(name, value, params={}) = {  // value is true or false
+  [asciiModeChangedNotificationName(name, value)]: {
+    notificationType: 'rime',
+    rimeNotificationType: 'optionChanged',
+    rimeOptionName: 'ascii_mode',
+    rimeOptionValue: value,
+    backgroundStyle: params.backgroundStyleName,
+    foregroundStyle: params.foregroundStyleName,
+    [if std.objectHas(params, 'action') then 'action' else null]: params.action,
+    [if std.objectHas(params, 'bounds') then 'bounds' else null]: params.bounds,
+  },
+};
+
 {
   extractProperty: extractProperty,
   extractProperties: extractProperties,
@@ -189,4 +213,8 @@ local newRowKeyboardLayout(rows) = {
   newForegroundStyle: newForegroundStyle,
   newAnimation: newAnimation,
   newRowKeyboardLayout: newRowKeyboardLayout,
+  asciiModeForegroundStyleName: asciiModeForegroundStyleName,
+  newAsciiModeForegroundStyle: newAsciiModeForegroundStyle,
+  asciiModeChangedNotificationName: asciiModeChangedNotificationName,
+  newAsciiModeChangedNotification: newAsciiModeChangedNotification,
 }

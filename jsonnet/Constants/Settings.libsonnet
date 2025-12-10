@@ -42,4 +42,8 @@
   // 是否显示气泡
   // true 显示，false 不显示
   needHint: false,
+
+  // 中文键盘上字母是否大写
+  // true 大写，false 小写
+  uppercaseForChinese: true,
 }

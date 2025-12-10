@@ -11,12 +11,6 @@ local swipeTextCenter = {
   down: { x: 0.72, y: 0.28 },
 };
 
-local alphabeticTextCenterWhenShowSwipeText =
-  local showSwipeText = settings.showSwipeUpText || settings.showSwipeDownText;
-  {
-    [if showSwipeText then 'center']: { y: 0.55 }
-  };
-
 local getKeyboardActionText(params={}, key='action', isUppercase=false) =
   if std.objectHas(params, 'text') then
     { text: params.text }
@@ -101,8 +95,7 @@ local newAlphabeticButtonForegroundStyle(isDark=false, params={}) =
       normalColor: colors.standardButtonForegroundColor,
       highlightColor: colors.standardButtonHighlightedForegroundColor,
       fontSize: fonts.standardButtonTextFontSize,
-    } + alphabeticTextCenterWhenShowSwipeText
-      + params, isDark) + getKeyboardActionText(params);
+    } + params, isDark) + getKeyboardActionText(params);
 
 // 字母键按钮上下划提示前景样式
 local newAlphabeticButtonAlternativeForegroundStyle(isDark=false, params={}) =
@@ -125,8 +118,7 @@ local newAlphabeticButtonUppercaseForegroundStyle(isDark=false, params={}) =
     normalColor: colors.standardButtonForegroundColor,
     highlightColor: colors.standardButtonHighlightedForegroundColor,
     fontSize: fonts.standardButtonUppercasedTextFontSize,
-  } + alphabeticTextCenterWhenShowSwipeText
-    + params, isDark);
+  } + params, isDark);
 
 // 字母提示背景样式
 local alphabeticHintBackgroundStyleName = 'alphabeticHintBackgroundStyle';
@@ -348,19 +340,20 @@ local newToolbarButton(name, isDark=false, params={}) =
   };
 
 local newAlphabeticButton(name, isDark=false, params={}, needHint=settings.needHint) =
-  local swipeUpStyle = if std.objectHas(params, 'swipeUp') && settings.showSwipeUpText then [name + 'SwipeUpForegroundStyle'] else [];
-  local swipeDownStyle = if std.objectHas(params, 'swipeDown') && settings.showSwipeDownText then [name + 'SwipeDownForegroundStyle'] else [];
+  local swipeStyleName = if std.objectHas(params, 'swipeUp') && settings.showSwipeUpText then [name + 'SwipeUpForegroundStyle'] else []
+  +
+    if std.objectHas(params, 'swipeDown') && settings.showSwipeDownText then [name + 'SwipeDownForegroundStyle'] else [];
   {
     [name]: utils.newBackgroundStyle(style=alphabeticButtonBackgroundStyleName)
             + (
               if std.objectHas(params, 'foregroundStyleName') then
                 { foregroundStyle: params.foregroundStyleName }
               else
-                utils.newForegroundStyle(style=[name + 'ForegroundStyle'] + swipeUpStyle + swipeDownStyle)
+                utils.newForegroundStyle(style=[name + 'ForegroundStyle'] + swipeStyleName)
             )
             + (
               if std.objectHas(params, 'uppercasedStateAction') then
-                utils.newForegroundStyle('uppercasedStateForegroundStyle', [name + 'UppercaseForegroundStyle'] + swipeUpStyle + swipeDownStyle)
+                utils.newForegroundStyle('uppercasedStateForegroundStyle', [name + 'UppercaseForegroundStyle'] + swipeStyleName)
               else {}
             )
             + (
@@ -630,6 +623,7 @@ local newCommitCandidateForegroundStyle(isDark=false, params={}) = {
 
 
 {
+  getKeyboardActionText: getKeyboardActionText,
   keyboardBackgroundStyleName: keyboardBackgroundStyleName,
   newKeyboardBackgroundStyle: newKeyboardBackgroundStyle,
 
@@ -644,6 +638,7 @@ local newCommitCandidateForegroundStyle(isDark=false, params={}) = {
 
   newAlphabeticButtonForegroundStyle: newAlphabeticButtonForegroundStyle,
 
+  newAlphabeticButtonAlternativeForegroundStyle: newAlphabeticButtonAlternativeForegroundStyle,
   newAlphabeticButtonUppercaseForegroundStyle: newAlphabeticButtonUppercaseForegroundStyle,
 
   alphabeticHintBackgroundStyleName: alphabeticHintBackgroundStyleName,
@@ -662,6 +657,8 @@ local newCommitCandidateForegroundStyle(isDark=false, params={}) = {
 
   newTextSystemButtonForegroundStyle: newTextSystemButtonForegroundStyle,
   newImageSystemButtonForegroundStyle: newImageSystemButtonForegroundStyle,
+  newAssetImageSystemButtonForegroundStyle: newAssetImageSystemButtonForegroundStyle,
+  newSystemButtonForegroundStyle: newSystemButtonForegroundStyle,
 
   newFloatingKeyboardButton: newFloatingKeyboardButton,
   toolbarSlideButtonsName: toolbarSlideButtonsName,

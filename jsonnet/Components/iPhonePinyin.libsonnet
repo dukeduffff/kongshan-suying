@@ -15,6 +15,12 @@ local hintStyle = {
   },
 };
 
+local alphabeticTextCenterWhenShowSwipeText =
+  local showSwipeText = settings.showSwipeUpText || settings.showSwipeDownText;
+  {
+    [if showSwipeText then 'center']: { y: 0.55 }
+  };
+
 // 标准26键布局
 local rows = [
   [
@@ -60,6 +66,28 @@ local rows = [
   ],
 ];
 
+local getAlphabeticButtonSize(name) =
+  local extra = {
+    [params.keyboard.aButton.name]: {
+      size:
+        { width: '168.75/1125' },
+      bounds:
+        { width: '111/168.75', alignment: 'right' },
+    },
+    [params.keyboard.lButton.name]: {
+      size:
+        { width: '168.75/1125' },
+      bounds:
+        { width: '111/168.75', alignment: 'left' },
+    },
+  };
+  (
+  if std.objectHas(extra, name) then
+    extra[name]
+  else
+    portraitNormalButtonSize
+  );
+
 
 local newKeyLayout(isDark=false, isPortrait=true) =
   local keyboardHeight = if isPortrait then params.keyboard.height.iPhone.portrait else params.keyboard.height.iPhone.landscape;
@@ -68,36 +96,51 @@ local newKeyLayout(isDark=false, isPortrait=true) =
     keyboardStyle: utils.newBackgroundStyle(style=basicStyle.keyboardBackgroundStyleName),
   }
   + utils.newRowKeyboardLayout(rows)
-  // using default width first
-  + std.foldl(function(acc, button) acc +
+
+  // letter Buttons
+  + std.foldl(function(acc, button)
+      local swipeStyleName = if std.objectHas(button.params, 'swipeUp') && settings.showSwipeUpText then [button.name + 'SwipeUpForegroundStyle'] else []
+  +
+    if std.objectHas(button.params, 'swipeDown') && settings.showSwipeDownText then [button.name + 'SwipeDownForegroundStyle'] else [];
+      acc +
       basicStyle.newAlphabeticButton(
         button.name,
         isDark,
-        portraitNormalButtonSize + button.params + hintStyle),
+        getAlphabeticButtonSize(button.name) + button.params + hintStyle + alphabeticTextCenterWhenShowSwipeText +
+        (
+          if settings.uppercaseForChinese then {
+            foregroundStyleName: [{
+              styleName: [utils.asciiModeForegroundStyleName(button.name, value)] + swipeStyleName,
+              conditionKey: 'rime$ascii_mode',
+              conditionValue: value,
+            } for value in [true, false]
+            ],
+            notification: [
+              utils.asciiModeChangedNotificationName(button.name, true),
+              utils.asciiModeChangedNotificationName(button.name, false),
+            ]
+          }
+          else {}
+        ))
+      + utils.newAsciiModeChangedNotification(button.name, true, {
+        backgroundStyleName: basicStyle.alphabeticButtonBackgroundStyleName,
+        foregroundStyleName: [utils.asciiModeForegroundStyleName(button.name, true)] + swipeStyleName,
+        [if std.objectHas(getAlphabeticButtonSize(button.name), 'bounds') then 'bounds' else null]: getAlphabeticButtonSize(button.name).bounds,
+      })
+      + utils.newAsciiModeChangedNotification(button.name, false, {
+        backgroundStyleName: basicStyle.alphabeticButtonBackgroundStyleName,
+        foregroundStyleName: [utils.asciiModeForegroundStyleName(button.name, false)] + swipeStyleName,
+        [if std.objectHas(getAlphabeticButtonSize(button.name), 'bounds') then 'bounds' else null]: getAlphabeticButtonSize(button.name).bounds,})
+      + (
+        if settings.uppercaseForChinese then
+          utils.newAsciiModeForegroundStyle(button.name,
+            basicStyle.newAlphabeticButtonUppercaseForegroundStyle(isDark, button.params) + basicStyle.getKeyboardActionText(button.params, 'uppercasedStateAction') + getAlphabeticButtonSize(button.name) + alphabeticTextCenterWhenShowSwipeText,
+            basicStyle.newAlphabeticButtonForegroundStyle(isDark, button.params) + getAlphabeticButtonSize(button.name) + alphabeticTextCenterWhenShowSwipeText)
+        else {}
+      )
+      ,
       params.keyboard.letterButtons,
       {})
-
-  // Second Row
-  + basicStyle.newAlphabeticButton(
-    params.keyboard.aButton.name,
-    isDark,
-    {
-      size:
-        { width: '168.75/1125' },
-      bounds:
-        { width: '111/168.75', alignment: 'right' },
-    } + params.keyboard.aButton.params + hintStyle,
-  )
-  + basicStyle.newAlphabeticButton(
-    params.keyboard.lButton.name,
-    isDark,
-    {
-      size:
-        { width: '168.75/1125' },
-      bounds:
-        { width: '111/168.75', alignment: 'left' },
-    } + params.keyboard.lButton.params + hintStyle
-  )
 
   // Third Row
   + basicStyle.newSystemButton(
@@ -155,11 +198,51 @@ local newKeyLayout(isDark=false, isPortrait=true) =
         { width: '225/1125' },
     } + params.keyboard.numericButton.params
   )
+
   + basicStyle.newAlphabeticButton(
     params.keyboard.commaButton.name,
     isDark,
-    portraitNormalButtonSize + params.keyboard.commaButton.params
+    portraitNormalButtonSize + params.keyboard.commaButton.params + {
+      foregroundStyleName: [{
+        styleName: [
+          utils.asciiModeForegroundStyleName(params.keyboard.commaButton.name, value),
+          utils.asciiModeForegroundStyleName(params.keyboard.commaButton.name + 'SwipeUp', value)
+        ],
+        conditionKey: 'rime$ascii_mode',
+        conditionValue: value,
+      } for value in [true, false]
+      ],
+      notification: [
+        utils.asciiModeChangedNotificationName(params.keyboard.commaButton.name, true),
+        utils.asciiModeChangedNotificationName(params.keyboard.commaButton.name, false),
+      ]
+    }
   )
+  + utils.newAsciiModeChangedNotification(params.keyboard.commaButton.name, true, {
+    backgroundStyleName: basicStyle.alphabeticButtonBackgroundStyleName,
+    foregroundStyleName: [
+      utils.asciiModeForegroundStyleName(params.keyboard.commaButton.name, true),
+      utils.asciiModeForegroundStyleName(params.keyboard.commaButton.name + 'SwipeUp', true)
+    ],
+  })
+  + utils.newAsciiModeChangedNotification(params.keyboard.commaButton.name, false, {
+    backgroundStyleName: basicStyle.alphabeticButtonBackgroundStyleName,
+    foregroundStyleName: [
+      utils.asciiModeForegroundStyleName(params.keyboard.commaButton.name, false),
+      utils.asciiModeForegroundStyleName(params.keyboard.commaButton.name + 'SwipeUp', false)
+    ],
+  })
+  + utils.newAsciiModeForegroundStyle(params.keyboard.commaButton.name,
+      basicStyle.newAlphabeticButtonForegroundStyle(isDark, params.keyboard.commaButton.params)
+        + { text: '，', center: { x: 0.68, y: 0.45 } },
+      basicStyle.newAlphabeticButtonForegroundStyle(isDark, params.keyboard.commaButton.params)
+        + { text: ',', center: { y: 0.45 }})
+  + utils.newAsciiModeForegroundStyle(params.keyboard.commaButton.name + 'SwipeUp',
+      basicStyle.newAlphabeticButtonAlternativeForegroundStyle(isDark, params.keyboard.commaButton.params)
+        + { text: '。', center: { x: 0.55, y: 0.25 } },
+      basicStyle.newAlphabeticButtonAlternativeForegroundStyle(isDark, params.keyboard.commaButton.params)
+        + { text: '.', center: { y: 0.25 }})
+
   + basicStyle.newSpaceButton(
     params.keyboard.spaceButton.name,
     isDark,
@@ -174,8 +257,8 @@ local newKeyLayout(isDark=false, isPortrait=true) =
     portraitNormalButtonSize
     + params.keyboard.asciiModeButton.params
   )
-  + { asciiModeIsTrueForegroundStyle: basicStyle.newAlphabeticButtonForegroundStyle(isDark, { assetImageName: 'englishState2' }) }
-  + { asciiModeIsFalseForegroundStyle: basicStyle.newAlphabeticButtonForegroundStyle(isDark, { assetImageName: 'chineseState2' }) }
+  + { asciiModeIsTrueForegroundStyle: basicStyle.newAssetImageSystemButtonForegroundStyle(isDark, { assetImageName: 'englishState2' }) }
+  + { asciiModeIsFalseForegroundStyle: basicStyle.newAssetImageSystemButtonForegroundStyle(isDark, { assetImageName: 'chineseState2' }) }
   + basicStyle.newSystemButton(
     params.keyboard.enterButton.name,
     isDark,
