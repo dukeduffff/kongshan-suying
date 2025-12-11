@@ -43,7 +43,7 @@
   // true 显示，false 不显示
   needHint: false,
 
-  // 中文键盘上字母是否大写
+  // 中文模式下，字母键是否大写显示
   // true 大写，false 小写
   uppercaseForChinese: true,
 }

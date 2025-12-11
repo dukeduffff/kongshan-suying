@@ -1,6 +1,10 @@
 # 「空山素影」
 
-皮肤文件通过 `Jsonnet` 语法编写，PC 端编译时需要安装 `jsonnet` 等命令行工具。主要与“空山五笔”方案配合使用。
+皮肤文件通过 `Jsonnet` 语法编写，在手机端首次使用时请执行「运行 main.jsonnet」进行编译生成皮肤配置文件。
+
+PC 端编译时需要安装 `jsonnet` 等命令行工具。
+
+该皮肤主要与“空山五笔”方案配合使用。
 
 ## 使用说明
 
@@ -39,6 +43,7 @@ enter 下划换行
   + `toolbarButtons`: 工具栏显示的滑动按钮列表，按顺序排列。
   + `accentColor`: 主题色选择。
   + `needHint`: 是否显示按键气泡提示。
+  + `uppercaseForChinese`: 中文模式下，字母键是否大写显示。
 
 - `jsonnet/Constants/Keyboard.libsonnet`: 定义了键盘按键，各区域高度等常量。
 
