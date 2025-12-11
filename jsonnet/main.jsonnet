@@ -2,7 +2,7 @@ local iPhoneNumeric = import 'Components/iPhoneNumeric.libsonnet';
 local iPhonePinyin = import 'Components/iPhonePinyin.libsonnet';
 local iPadPinyin = import 'Components/iPadPinyin.libsonnet';
 local iPadNumeric = import 'Components/iPadNumeric.libsonnet';
-local panel = import 'Components/Panel.libsonnet';
+local floatingKeyboard = import 'Components/FloatingKeyboard.libsonnet';
 
 local pinyinPortraitFileName = 'pinyinPortrait';
 local lightPinyinPortraitFileContent = iPhonePinyin.new(isDark=false, isPortrait=true);
@@ -36,13 +36,13 @@ local iPadNumericLandscapeName = 'iPadNumericLandscape';
 local lightIpadNumericLandscapeContent = iPadNumeric.new(isDark=false, isPortrait=false);
 local darkIpadNumericLandscapeContent = iPadNumeric.new(isDark=true, isPortrait=false);
 
-local panelPortraitName = 'panelPortrait';
-local lightPanelPortraitContent = panel.new(isDark=false, isPortrait=true);
-local darkPanelPortraitContent = panel.new(isDark=true, isPortrait=true);
+local FloatingKeyboardPortraitName(name) = name + 'Portrait';
+local lightFloatingKeyboardPortraitContent = floatingKeyboard.new(isDark=false, isPortrait=true);
+local darkFloatingKeyboardPortraitContent = floatingKeyboard.new(isDark=true, isPortrait=true);
 
-local panelLandscapeName = 'panelLandscape';
-local lightPanelLandscapeContent = panel.new(isDark=false, isPortrait=false);
-local darkPanelLandscapeContent = panel.new(isDark=true, isPortrait=false);
+local FloatingKeyboardLandscapeName(name) = name + 'Landscape';
+local lightFloatingKeyboardLandscapeContent = floatingKeyboard.new(isDark=false, isPortrait=false);
+local darkFloatingKeyboardLandscapeContent = floatingKeyboard.new(isDark=true, isPortrait=false);
 
 local config = {
   pinyin: {
@@ -67,19 +67,23 @@ local config = {
       floating: numericPortraitFileName,
     },
   },
-
+} + {
   // 浮动键盘面板
-  panel: {
-    iPhone: {
-      portrait: panelPortraitName,
-      landscape: panelLandscapeName,
-    },
-    iPad: {
-      portrait: panelPortraitName,
-      landscape: panelLandscapeName,
-      floating: panelPortraitName,
-    },
-  },
+  [name]:
+    local portraitName = FloatingKeyboardPortraitName(name);
+    local landscapeName = FloatingKeyboardLandscapeName(name);
+    {
+      iPhone: {
+        portrait: portraitName,
+        landscape: landscapeName,
+      },
+      iPad: {
+        portrait: portraitName,
+        landscape: landscapeName,
+        floating: portraitName,
+      },
+    }
+  for name in std.objectFields(lightFloatingKeyboardPortraitContent)
 };
 
 // std.toString 生成的内容紧凑，生成速度快，但不易阅读，适合发布时使用
@@ -120,8 +124,25 @@ function(debug=false)
   ['dark/' + iPadNumericLandscapeName + '.yaml']: toString(darkIpadNumericLandscapeContent),
 
   // 浮动键盘
-  ['light/' + panelPortraitName + '.yaml']: toString(lightPanelPortraitContent),
-  ['dark/' + panelPortraitName + '.yaml']: toString(darkPanelPortraitContent),
-  ['light/' + panelLandscapeName + '.yaml']: toString(lightPanelLandscapeContent),
-  ['dark/' + panelLandscapeName + '.yaml']: toString(darkPanelLandscapeContent),
+  // ['light/' + panelPortraitName + '.yaml']: toString(lightPanelPortraitContent),
+  // ['dark/' + panelPortraitName + '.yaml']: toString(darkPanelPortraitContent),
+  // ['light/' + panelLandscapeName + '.yaml']: toString(lightPanelLandscapeContent),
+  // ['dark/' + panelLandscapeName + '.yaml']: toString(darkPanelLandscapeContent),
+}
++ {
+  // 浮动键盘 light Portrait
+  ['light/' + name + 'Portrait.yaml']: toString(lightFloatingKeyboardPortraitContent[name])
+  for name in std.objectFields(lightFloatingKeyboardPortraitContent)
+} + {
+  // 浮动键盘 dark Portrait
+  ['dark/' + name + 'Portrait.yaml']: toString(darkFloatingKeyboardPortraitContent[name])
+  for name in std.objectFields(darkFloatingKeyboardPortraitContent)
+} + {
+  // 浮动键盘 light Landscape
+  ['light/' + name + 'Landscape.yaml']: toString(lightFloatingKeyboardLandscapeContent[name])
+  for name in std.objectFields(lightFloatingKeyboardLandscapeContent)
+} + {
+  // 浮动键盘 dark Landscape
+  ['dark/' + name + 'Landscape.yaml']: toString(darkFloatingKeyboardLandscapeContent[name])
+  for name in std.objectFields(darkFloatingKeyboardLandscapeContent)
 }
