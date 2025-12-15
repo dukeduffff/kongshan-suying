@@ -194,9 +194,15 @@ local newAsciiModeChangedNotification(name, value, params={}) = {  // value is t
     rimeOptionValue: value,
     backgroundStyle: params.backgroundStyleName,
     foregroundStyle: params.foregroundStyleName,
-    [if std.objectHas(params, 'action') then 'action' else null]: params.action,
-    [if std.objectHas(params, 'bounds') then 'bounds' else null]: params.bounds,
-  },
+  } + extractProperties(
+    params,
+    [
+      'action',
+      'bounds',
+      'hintStyle',
+      'hintSymbolsStyle',
+    ]
+  ),
 };
 
 {
