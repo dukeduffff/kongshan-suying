@@ -200,7 +200,6 @@ local newVerticalCandidateBackspaceButtonStyle(isDark) = {
 
 // NOTE: 工具栏按钮列表，顺序与 settings.toolbarButtons 中的描述对应
 local toolbarButtonNames = [
-  keyboardParams.toolbarButton.toolbarScriptingSyncButton.name, // 皮肤开发
   keyboardParams.toolbarButton.toolbarPerformanceButton.name, // 查看性能
   keyboardParams.toolbarButton.toolbarRimeSwitcherButton.name, // RimeSwitcher
   keyboardParams.toolbarButton.toolbarScriptButton.name, // 脚本
@@ -223,7 +222,7 @@ local toolbarButtonNames = [
 ];
 
 local slideButtons = [
-  keyboardParams.toolbarButton[toolbarButtonNames[buttonCode]]
+  keyboardParams.toolbarButton[toolbarButtonNames[buttonCode - 1]]
   for buttonCode in settings.toolbarButtons
 ];
 

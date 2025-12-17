@@ -153,7 +153,7 @@ local settings = import '../Settings.libsonnet';
       name: 'toolbarScriptButton',
       params: {
         action: { shortcut: '#toggleScriptView' },
-        systemImageName: 'apple.terminal',
+        systemImageName: 'terminal',
         text: '脚本',
       },
     },
@@ -242,7 +242,7 @@ local settings = import '../Settings.libsonnet';
       name: 'toolbarRimeSyncButton',
       params: {
         action: { openURL: 'hamster3://com.ihsiao.apps.hamster3/rime?action=sync' },
-        systemImageName: 'arrow.triangle.2.circlepath.icloud',
+        systemImageName: 'checkmark.icloud',
         text: 'Rime同步',
       },
     },
@@ -270,20 +270,11 @@ local settings = import '../Settings.libsonnet';
         text: '右手模式',
       },
     },
-    toolbarScriptingSyncButton: {
-      name: 'toolbarScriptingSyncButton',
-      params: {
-        // action: { openURL: 'scripting://run/%E7%9A%AE%E8%82%A4ws%E5%90%8C%E6%AD%A5' },
-        action: { openURL: 'scripting://' },
-        systemImageName: 'macbook.and.iphone',
-        text: '皮肤开发',
-      },
-    },
     toolbarKeyboardNumericButton: {
       name: 'toolbarKeyboardNumericButton',
       params: {
         action: { keyboardType: 'numeric', },
-        systemImageName: 'numbers.rectangle',
+        systemImageName: 'circle.grid.3x3',
         text: '数字键盘',
       },
     },
