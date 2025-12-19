@@ -695,6 +695,12 @@ local settings = import '../Settings.libsonnet';
         action: { shortcut: '#中英切换' },
         assetImageName: 'chineseState2',
         swipeUp: { action: { shortcut: '#方案切换' } },
+
+        asciiModeOn: {
+          assetImageName: 'englishState2'
+        },
+        asciiModeOff: {
+        },
       },
     },
 
@@ -905,8 +911,15 @@ local settings = import '../Settings.libsonnet';
     commaButton: {
       name: 'commaButton',
       params: {
-        action: { character: ',' },
-        swipeUp: { action: { character: '.' } },
+        action: { character: ',' }, center: { y: 0.48 },
+        swipeUp: { action: { character: '.' }, center: { y: 0.28 } },
+
+        asciiModeOn: {
+        },
+        asciiModeOff: {
+          text: '，', center: { y: 0.52 },
+          swipeUp: { text: '。', center: { y: 0.3 } },
+        },
       },
     },
     chinesePeriodButton: {

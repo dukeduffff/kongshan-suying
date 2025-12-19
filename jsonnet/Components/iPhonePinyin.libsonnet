@@ -99,7 +99,6 @@ local newKeyLayout(isDark=false, isPortrait=true) =
 
   // letter Buttons
   + std.foldl(function(acc, button)
-      local swipeStyleName = basicStyle.generateSwipeForegroundStyleNames(button.name, button.params);
       acc +
       basicStyle.newAlphabeticButton(
         button.name,
@@ -107,36 +106,11 @@ local newKeyLayout(isDark=false, isPortrait=true) =
         getAlphabeticButtonSize(button.name) + button.params + hintStyle + alphabeticTextCenterWhenShowSwipeText +
         (
           if settings.uppercaseForChinese then {
-            foregroundStyleName: [{
-              styleName: [utils.asciiModeForegroundStyleName(button.name, value)] + swipeStyleName,
-              conditionKey: 'rime$ascii_mode',
-              conditionValue: value,
-            } for value in [true, false]
-            ],
-            notification: [
-              utils.asciiModeChangedNotificationName(button.name, true),
-              utils.asciiModeChangedNotificationName(button.name, false),
-            ]
-          }
-          else {}
-        ))
-      + utils.newAsciiModeChangedNotification(button.name, true, {
-        backgroundStyleName: basicStyle.alphabeticButtonBackgroundStyleName,
-        foregroundStyleName: [utils.asciiModeForegroundStyleName(button.name, true)] + swipeStyleName,
-        [if std.objectHas(getAlphabeticButtonSize(button.name), 'bounds') then 'bounds' else null]: getAlphabeticButtonSize(button.name).bounds,
-      })
-      + utils.newAsciiModeChangedNotification(button.name, false, {
-        backgroundStyleName: basicStyle.alphabeticButtonBackgroundStyleName,
-        foregroundStyleName: [utils.asciiModeForegroundStyleName(button.name, false)] + swipeStyleName,
-        [if std.objectHas(getAlphabeticButtonSize(button.name), 'bounds') then 'bounds' else null]: getAlphabeticButtonSize(button.name).bounds,})
-      + (
-        if settings.uppercaseForChinese then
-          utils.newAsciiModeForegroundStyle(button.name,
-            basicStyle.newAlphabeticButtonUppercaseForegroundStyle(isDark, button.params) + basicStyle.getKeyboardActionText(button.params, 'uppercasedStateAction') + getAlphabeticButtonSize(button.name) + alphabeticTextCenterWhenShowSwipeText,
-            basicStyle.newAlphabeticButtonForegroundStyle(isDark, button.params) + getAlphabeticButtonSize(button.name) + alphabeticTextCenterWhenShowSwipeText)
-        else {}
-      )
-      ,
+            asciiModeOn: {},
+            asciiModeOff: basicStyle.getKeyboardActionText(button.params, 'uppercasedStateAction'),
+          } else {}
+        ),
+        swipeTextFollowSetting=true),
       params.keyboard.letterButtons,
       {})
 
@@ -200,47 +174,8 @@ local newKeyLayout(isDark=false, isPortrait=true) =
   + basicStyle.newAlphabeticButton(
     params.keyboard.commaButton.name,
     isDark,
-    portraitNormalButtonSize + params.keyboard.commaButton.params + {
-      foregroundStyleName: [{
-        styleName: [
-          utils.asciiModeForegroundStyleName(params.keyboard.commaButton.name, value),
-          utils.asciiModeForegroundStyleName(params.keyboard.commaButton.name + 'SwipeUp', value)
-        ],
-        conditionKey: 'rime$ascii_mode',
-        conditionValue: value,
-      } for value in [true, false]
-      ],
-      notification: [
-        utils.asciiModeChangedNotificationName(params.keyboard.commaButton.name, true),
-        utils.asciiModeChangedNotificationName(params.keyboard.commaButton.name, false),
-      ]
-    }
+    portraitNormalButtonSize + params.keyboard.commaButton.params
   )
-  + utils.newAsciiModeChangedNotification(params.keyboard.commaButton.name, true, {
-    backgroundStyleName: basicStyle.alphabeticButtonBackgroundStyleName,
-    foregroundStyleName: [
-      utils.asciiModeForegroundStyleName(params.keyboard.commaButton.name, true),
-      utils.asciiModeForegroundStyleName(params.keyboard.commaButton.name + 'SwipeUp', true)
-    ],
-  })
-  + utils.newAsciiModeChangedNotification(params.keyboard.commaButton.name, false, {
-    backgroundStyleName: basicStyle.alphabeticButtonBackgroundStyleName,
-    foregroundStyleName: [
-      utils.asciiModeForegroundStyleName(params.keyboard.commaButton.name, false),
-      utils.asciiModeForegroundStyleName(params.keyboard.commaButton.name + 'SwipeUp', false)
-    ],
-  })
-  + utils.newAsciiModeForegroundStyle(params.keyboard.commaButton.name,
-      basicStyle.newAlphabeticButtonForegroundStyle(isDark, params.keyboard.commaButton.params)
-        + { text: '，', center: { y: 0.5 } },
-      basicStyle.newAlphabeticButtonForegroundStyle(isDark, params.keyboard.commaButton.params)
-        + { center: { y: 0.48 }})
-  + utils.newAsciiModeForegroundStyle(params.keyboard.commaButton.name + 'SwipeUp',
-      basicStyle.newAlphabeticButtonAlternativeForegroundStyle(isDark, params.keyboard.commaButton.params.swipeUp)
-        + { text: '。', center: { y: 0.28 } },
-      basicStyle.newAlphabeticButtonAlternativeForegroundStyle(isDark, params.keyboard.commaButton.params.swipeUp)
-        + { center: { y: 0.28 }})
-
   + basicStyle.newSpaceButton(
     params.keyboard.spaceButton.name,
     isDark,
@@ -253,30 +188,7 @@ local newKeyLayout(isDark=false, isPortrait=true) =
     params.keyboard.asciiModeButton.name,
     isDark,
     portraitNormalButtonSize
-    + params.keyboard.asciiModeButton.params + {
-      foregroundStyle: [{
-        styleName: utils.asciiModeForegroundStyleName(params.keyboard.asciiModeButton.name, value),
-        conditionKey: 'rime$ascii_mode',
-        conditionValue: value,
-      } for value in [true, false]
-      ],
-      notification: [
-        utils.asciiModeChangedNotificationName(params.keyboard.asciiModeButton.name, true),
-        utils.asciiModeChangedNotificationName(params.keyboard.asciiModeButton.name, false),
-      ]
-    }
-  )
-  + utils.newAsciiModeChangedNotification(params.keyboard.asciiModeButton.name, true, {
-    backgroundStyleName: basicStyle.systemButtonBackgroundStyleName,
-    foregroundStyleName: utils.asciiModeForegroundStyleName(params.keyboard.asciiModeButton.name, true),
-  })
-  + utils.newAsciiModeChangedNotification(params.keyboard.asciiModeButton.name, false, {
-    backgroundStyleName: basicStyle.systemButtonBackgroundStyleName,
-    foregroundStyleName: utils.asciiModeForegroundStyleName(params.keyboard.asciiModeButton.name, false),
-  })
-  + utils.newAsciiModeForegroundStyle(params.keyboard.asciiModeButton.name,
-      basicStyle.newAssetImageSystemButtonForegroundStyle(isDark, { assetImageName: 'chineseState2' }),
-      basicStyle.newAssetImageSystemButtonForegroundStyle(isDark, { assetImageName: 'englishState2' })
+    + params.keyboard.asciiModeButton.params
   )
   + basicStyle.newSystemButton(
     params.keyboard.enterButton.name,
