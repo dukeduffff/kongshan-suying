@@ -213,7 +213,6 @@ local newKeyLayout(isDark=false, isPortrait=true) =
     + toolbar.new(isDark, isPortrait)
     + basicStyle.newKeyboardBackgroundStyle(isDark)
     + basicStyle.newAlphabeticButtonBackgroundStyle(isDark, extraParams)
-    + basicStyle.newAlphabeticButtonHintStyle(isDark)
     + basicStyle.newSystemButtonBackgroundStyle(isDark, extraParams)
     + basicStyle.newColorButtonBackgroundStyle(isDark, extraParams)
     + basicStyle.newColorButtonForegroundStyle(isDark, params=params.keyboard.enterButton.params)
