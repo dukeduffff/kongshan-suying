@@ -26,6 +26,7 @@ zxcvbnm 按键
 backspace 上划清空文本，下划撤销
 123 上划切换符号键盘，下划切换 emoji 键盘
 逗号 上划输入句号
+中英 上划切换方案
 enter 下划换行
 ```
 
@@ -41,8 +42,8 @@ enter 下划换行
   + `showSwipeDownText`: 是否显示按键的下划文字显示。
   + `toolbarButtonsMaxCount`: 工具栏滑动按钮的显示个数。
   + `toolbarButtons`: 工具栏显示的滑动按钮列表，按顺序排列。
+  + `toolbarPreferIcon`: 工具栏按钮以图标显示。
   + `accentColor`: 主题色选择。
-  + `needHint`: 是否显示按键气泡提示。
   + `uppercaseForChinese`: 中文模式下，字母键是否大写显示。
 
 - `jsonnet/Constants/Keyboard.libsonnet`: 定义了键盘按键，各区域高度等常量。

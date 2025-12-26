@@ -39,6 +39,10 @@
   // 19-Rime同步
   toolbarButtons: [ 17, 2, 3, 4, 5, 1, 14 ],
 
+  // toolbar 按钮以图标显示
+  // true 显示图标，false 显示文字
+  toolbarPreferIcon: true,
+
   // 主题色
   // 0-无  1-红色  2-绿色  3-橙色  4-蓝色
   accentColor: 4,
@@ -46,8 +50,4 @@
   // 中文模式下，字母键是否大写显示
   // true 大写，false 小写
   uppercaseForChinese: true,
-
-  // toolbar 按钮显示图标
-  // true 显示图标，false 显示文字
-  toolbarPreferIcon: true,
 }
