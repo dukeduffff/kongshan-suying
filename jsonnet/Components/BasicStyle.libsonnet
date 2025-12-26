@@ -383,7 +383,7 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
           )
           + utils.newBackgroundStyle(style=alphabeticHintBackgroundStyleName)
           + utils.newForegroundStyle(style=root.name + 'HintForegroundStyle'),
-      [root.name + 'HintForegroundStyle']: newAlphabeticButtonHintStyle(root.isDark, root.params) + getKeyboardActionText(root.params),
+      [root.name + 'HintForegroundStyle']: newAlphabeticButtonHintStyle(root.isDark, utils.excludeProperties(root.params, ['center'])) + getKeyboardActionText(root.params),
     },
   },
 
