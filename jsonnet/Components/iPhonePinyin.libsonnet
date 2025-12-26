@@ -11,7 +11,7 @@ local portraitNormalButtonSize = {
 
 local hintStyle = {
   hintStyle: {
-    size: { width: 50, height: 50 },
+    size: { width: self.height, height: params.toolbar.height },
   },
 };
 
@@ -159,7 +159,7 @@ local newKeyLayout(isDark=false, isPortrait=true) =
   + basicStyle.newAlphabeticButton(
     params.keyboard.commaButton.name,
     isDark,
-    portraitNormalButtonSize + params.keyboard.commaButton.params
+    portraitNormalButtonSize + params.keyboard.commaButton.params + hintStyle
   )
   + basicStyle.newSpaceButton(
     params.keyboard.spaceButton.name,

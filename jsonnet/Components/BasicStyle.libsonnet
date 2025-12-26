@@ -375,7 +375,13 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
       hintStyle: root.name + 'HintStyle',
     },
     reference+: {
-      [root.name + 'HintStyle']: utils.newBackgroundStyle(style=alphabeticHintBackgroundStyleName)
+      [root.name + 'HintStyle']: (
+            if std.objectHas(root.params, 'hintStyle') then
+              root.params.hintStyle
+            else
+              {}
+          )
+          + utils.newBackgroundStyle(style=alphabeticHintBackgroundStyleName)
           + utils.newForegroundStyle(style=root.name + 'HintForegroundStyle'),
       [root.name + 'HintForegroundStyle']: newAlphabeticButtonHintStyle(root.isDark, root.params) + getKeyboardActionText(root.params),
     },

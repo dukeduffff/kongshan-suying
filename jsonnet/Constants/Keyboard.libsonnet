@@ -697,12 +697,8 @@ local settings = import '../Settings.libsonnet';
         systemImageName: 'shift',
         action: 'shift',
 
-        uppercased: {
-          systemImageName: 'shift.fill',
-        },
-        capsLocked: {
-          systemImageName: 'capslock.fill',
-        },
+        uppercased: { systemImageName: 'shift.fill', },
+        capsLocked: { systemImageName: 'capslock.fill', },
       },
     },
 
@@ -713,9 +709,7 @@ local settings = import '../Settings.libsonnet';
         assetImageName: 'chineseState2',
         swipeUp: { action: { shortcut: '#方案切换' } },
 
-        whenAsciiModeOn: {
-          assetImageName: 'englishState2'
-        },
+        whenAsciiModeOn: { assetImageName: 'englishState2' },
       },
     },
 
