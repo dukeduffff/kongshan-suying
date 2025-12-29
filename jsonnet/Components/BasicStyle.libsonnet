@@ -641,7 +641,27 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
           }
       },
 
-  AddPreeditChangeEvent(): root {},
+  AddPreeditChangeEvent(newForegroundStyle):
+    local isPreeditModeAware = std.objectHas(root.params, 'whenPreeditChanged');
+    local preeditChangedParams = if isPreeditModeAware then root.params.whenPreeditChanged else {};
+    if !isPreeditModeAware then
+      root
+    else root {
+      [root.name]+: {
+        notification+: [
+          root.name + 'PreeditChangedNotification',
+        ],
+      },
+      reference+: {
+        [root.name + 'PreeditChangedNotification']: {
+          notificationType: 'preeditChanged',
+          backgroundStyle: root[root.name].backgroundStyle,
+          foregroundStyle: root.name + 'PreeditChangedForegroundStyle',
+        }
+        + utils.extractProperties(preeditChangedParams, ['action']),
+        [root.name + 'PreeditChangedForegroundStyle']: newForegroundStyle(isDark, root.params + preeditChangedParams),
+      },
+    },
 
   AddKeyboardPressedEvent(): root {},
 
@@ -671,7 +691,8 @@ local newAlphabeticButton(name, isDark=false, params={}, needHint=true, swipeTex
     .AddCapsLockedState(newAlphabeticButtonForegroundStyle)
     .AddAnimation()
     .AddLongPress()
-    .AddAsciiModeChangeEvent();
+    .AddAsciiModeChangeEvent()
+    .AddPreeditChangeEvent(newAlphabeticButtonForegroundStyle);
   button.GetButton() + button.reference;
 
 local newSystemButton(name, isDark=false, params={}) =
@@ -684,7 +705,8 @@ local newSystemButton(name, isDark=false, params={}) =
     .AddUppercasedState(newSystemButtonForegroundStyle)
     .AddCapsLockedState(newSystemButtonForegroundStyle)
     .AddLongPress()
-    .AddAsciiModeChangeEvent();
+    .AddAsciiModeChangeEvent()
+    .AddPreeditChangeEvent(newSystemButtonForegroundStyle);
   button.GetButton() + button.reference;
 
 local newColorButton(name, isDark=false, params={}) =
@@ -697,7 +719,8 @@ local newColorButton(name, isDark=false, params={}) =
     .AddUppercasedState(newColorButtonForegroundStyle)
     .AddCapsLockedState(newColorButtonForegroundStyle)
     .AddLongPress()
-    .AddAsciiModeChangeEvent();
+    .AddAsciiModeChangeEvent()
+    .AddPreeditChangeEvent(newColorButtonForegroundStyle);
   button.GetButton() + button.reference;
 
 local newSpaceButton(name, isDark=false, params={}) =

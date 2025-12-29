@@ -754,6 +754,11 @@ local settings = import '../Settings.libsonnet';
         text: '123',
         swipeUp: { action: { keyboardType: 'symbolic' } },
         swipeDown: { action: { keyboardType: 'emojis' } },
+
+        whenPreeditChanged: {
+          action: { character: '`'},
+          text: '分词',
+        },
       },
     },
 
