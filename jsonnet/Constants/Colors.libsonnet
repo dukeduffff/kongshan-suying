@@ -134,10 +134,7 @@ local standardCalloutBackgroundColor = {
 // 标准按键 Hint 前景色，用于按键的字体，图片等
 local standardCalloutForegroundColor = standardButtonForegroundColor;
 
-local standardCalloutHighlightedForegroundColor = {
-  light: '#FFFFFF',
-  dark: '#E6E6E6',
-};
+local standardCalloutHighlightedForegroundColor = colorButtonForegroundColor;
 
 // 标准按键 Hint 选中背景色，如长按符号列表中选中的符号背景色
 local standardCalloutSelectedBackgroundColor = colorButtonBackgroundColor;

@@ -199,6 +199,8 @@ local newKeyLayout(isDark=false, isPortrait=true) =
     + basicStyle.newSystemButtonBackgroundStyle(isDark, extraParams)
     + basicStyle.newColorButtonBackgroundStyle(isDark, extraParams)
     + basicStyle.newAlphabeticHintBackgroundStyle(isDark, { cornerRadius: 10 })
+    + basicStyle.newLongPressSymbolsBackgroundStyle(isDark, extraParams)
+    + basicStyle.newLongPressSymbolsSelectedBackgroundStyle(isDark, extraParams)
     + basicStyle.newButtonAnimation()
     + newKeyLayout(isDark, isPortrait)
     + basicStyle.newSpaceButtonRimeSchemaForegroundStyle(isDark)

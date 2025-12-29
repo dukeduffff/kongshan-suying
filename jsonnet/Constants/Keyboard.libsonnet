@@ -427,6 +427,9 @@ local settings = import '../Settings.libsonnet';
         uppercased: { action: { character: 'A' } },
         swipeUp: { action: { character: '!' } },
         swipeDown: { action: { shortcut: '#selectText' }, text: '全' },
+        longPress: [
+          { action: { shortcut: '#左手模式' }, systemImageName: 'keyboard.onehanded.left' },
+        ],
       },
     },
     sButton: {
@@ -499,6 +502,9 @@ local settings = import '../Settings.libsonnet';
         uppercased: { action: { character: 'L' } },
         swipeUp: { action: { character: '"' } },
         swipeDown: { action: { character: "'" } },
+        longPress: [
+          { action: { shortcut: '#右手模式' }, systemImageName: 'keyboard.onehanded.right' }
+        ],
       },
     },
 

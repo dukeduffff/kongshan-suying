@@ -147,6 +147,49 @@ local newAlphabeticButtonHintStyle(isDark=false, params={}) =
     fontSize: fonts.hintTextFontSize,
   } + params, isDark);
 
+// 长按背景样式
+local longPressSymbolsBackgroundStyleName = 'longPressSymbolsBackgroundStyle';
+local newLongPressSymbolsBackgroundStyle(isDark=false, params={}) = {
+  [longPressSymbolsBackgroundStyleName]: utils.newGeometryStyle({
+    normalColor: colors.standardCalloutBackgroundColor,
+    highlightColor: colors.standardCalloutSelectedBackgroundColor,
+    cornerRadius: 10,
+    borderColor: colors.standardCalloutBorderColor,
+    borderSize: 0.5,
+    shadowRadius: 24,
+    shadowOffset: { x: 0, y: 0 },
+    normalShadowColor: '#000000',
+    highlightShadowColor: '#000000',
+  } + params, isDark),
+};
+
+// 长按前景样式
+local newLongPressSymbolsForegroundStyle(isDark=false, params={}) =
+  if std.objectHas(params, 'systemImageName') then
+    utils.newSystemImageStyle({
+      normalColor: colors.standardCalloutForegroundColor,
+      highlightColor: colors.standardCalloutHighlightedForegroundColor,
+      fontSize: fonts.hintImageFontSize,
+    } + params, isDark)
+  else
+    utils.newTextStyle({
+      normalColor: colors.standardCalloutForegroundColor,
+      highlightColor: colors.standardCalloutHighlightedForegroundColor,
+      fontSize: fonts.hintTextFontSize,
+    } + params, isDark) + getKeyboardActionText(params);
+
+// 长按高亮背景样式
+local longPressSymbolsSelectedBackgroundStyleName = 'longPressSymbolsSelectedBackgroundStyle';
+local newLongPressSymbolsSelectedBackgroundStyle(isDark=false, params={}) = {
+  [longPressSymbolsSelectedBackgroundStyleName]: utils.newGeometryStyle({
+    normalColor: colors.standardCalloutSelectedBackgroundColor,
+    highlightColor: colors.standardCalloutSelectedBackgroundColor,
+    cornerRadius: buttonCornerRadius,
+    normalLowerEdgeColor: colors.lowerEdgeOfButtonNormalColor,
+    highlightLowerEdgeColor: colors.lowerEdgeOfButtonHighlightColor,
+  } + params, isDark),
+};
+
 // 系统功能键按钮背景样式
 local systemButtonBackgroundStyleName = 'systemButtonBackgroundStyle';
 local newSystemButtonBackgroundStyle(isDark=false, params={}) = {
@@ -474,7 +517,54 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
         },
       },
 
-  AddLongPress(): root {},
+  AddLongPress():
+    local hasLongPressParams = std.objectHas(root.params, 'longPress');
+    local longPressParams = if hasLongPressParams then root.params.longPress else {};
+    if !hasLongPressParams then
+      root
+    else
+      root {
+        [root.name]+: {
+          hintSymbolsStyle: root.name + 'LongPressSymbolsStyle',
+        },
+        reference+: {
+          [root.name + 'LongPressSymbolsStyle']:
+            local findSelectedIndex =
+              local findIndex(arr, idx) =
+              if idx >= std.length(arr) then
+                0 // 默认选中第一个
+              else if std.objectHas(arr[idx], 'selected') && arr[idx].selected == true then
+                idx
+              else
+                findIndex(arr, idx + 1);
+            findIndex(longPressParams, 0);
+           {
+            size: { width: self.height, height: keyboardParams.toolbar.height },
+            insets: {
+              left: 3,
+              right: 3,
+              top: 3,
+              bottom: 3,
+            },
+            symbolStyles: [
+              root.name + 'LongPressSymbol'+i+'Style' for i in std.range(0, std.length(longPressParams) - 1)
+            ],
+            selectedIndex: findSelectedIndex,
+           }
+          + utils.newBackgroundStyle(style=longPressSymbolsBackgroundStyleName)
+          + utils.newBackgroundStyle('selectedBackgroundStyle', style=longPressSymbolsSelectedBackgroundStyleName)
+        } + {
+          [root.name + 'LongPressSymbol'+i+'Style']: {
+            action: longPressParams[i].action,
+          }
+          + utils.newForegroundStyle(style=root.name + 'LongPressSymbol'+i+'ForegroundStyle'),
+            for i in std.range(0, std.length(longPressParams) - 1)
+        } + {
+          [root.name + 'LongPressSymbol'+i+'ForegroundStyle']:
+            newLongPressSymbolsForegroundStyle(isDark, longPressParams[i]),
+            for i in std.range(0, std.length(longPressParams) - 1)
+        },
+      },
 
   AddAnimation(): root {
     [root.name]+: utils.newAnimation(animation=[buttonAnimationName]),
@@ -580,6 +670,7 @@ local newAlphabeticButton(name, isDark=false, params={}, needHint=true, swipeTex
     .AddUppercasedState(newAlphabeticButtonUppercaseForegroundStyle)
     .AddCapsLockedState(newAlphabeticButtonForegroundStyle)
     .AddAnimation()
+    .AddLongPress()
     .AddAsciiModeChangeEvent();
   button.GetButton() + button.reference;
 
@@ -592,6 +683,7 @@ local newSystemButton(name, isDark=false, params={}) =
     .AddPropertiesInParams()
     .AddUppercasedState(newSystemButtonForegroundStyle)
     .AddCapsLockedState(newSystemButtonForegroundStyle)
+    .AddLongPress()
     .AddAsciiModeChangeEvent();
   button.GetButton() + button.reference;
 
@@ -604,6 +696,7 @@ local newColorButton(name, isDark=false, params={}) =
     .AddPropertiesInParams()
     .AddUppercasedState(newColorButtonForegroundStyle)
     .AddCapsLockedState(newColorButtonForegroundStyle)
+    .AddLongPress()
     .AddAsciiModeChangeEvent();
   button.GetButton() + button.reference;
 
@@ -753,6 +846,8 @@ local newCommitCandidateForegroundStyle(isDark=false, params={}) = {
   newAlphabeticHintBackgroundStyle: newAlphabeticHintBackgroundStyle,
 
   newAlphabeticButtonHintStyle: newAlphabeticButtonHintStyle,
+  newLongPressSymbolsBackgroundStyle: newLongPressSymbolsBackgroundStyle,
+  newLongPressSymbolsSelectedBackgroundStyle: newLongPressSymbolsSelectedBackgroundStyle,
 
   systemButtonBackgroundStyleName: systemButtonBackgroundStyleName,
   newSystemButtonBackgroundStyle: newSystemButtonBackgroundStyle,

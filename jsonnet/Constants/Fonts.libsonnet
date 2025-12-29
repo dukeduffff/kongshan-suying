@@ -24,6 +24,7 @@
   alternativeImageFontSize: 9,
 
   hintTextFontSize: 26,
+  hintImageFontSize: 24,
 
   candidateIndexFontSize: 12,
   candidateTextFontSize: 16,
