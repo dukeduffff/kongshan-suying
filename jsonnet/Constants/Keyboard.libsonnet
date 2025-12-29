@@ -438,7 +438,7 @@ local settings = import '../Settings.libsonnet';
         action: { character: 's' },
         uppercased: { action: { character: 'S' } },
         swipeUp: { action: { character: '^' } },
-        swipeDown: { action: { character: '@' } },
+        swipeDown: { action: { character: '`' } },
       },
     },
     dButton: {
@@ -514,7 +514,7 @@ local settings = import '../Settings.libsonnet';
       params: {
         action: { character: 'z' },
         uppercased: { action: { character: 'Z' } },
-        swipeUp: { action: { character: '`' } },
+        swipeUp: { action: { character: '@' } },
         swipeDown: { action: { shortcut: '#undo' }, text: '撤' },
       },
     },
