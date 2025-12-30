@@ -60,6 +60,15 @@ local rows = [
   [
     params.keyboard.numericButton,
     params.keyboard.commaButton,
+  ]
+  + (
+    if settings.showFunctionButton then
+      [params.keyboard.functionButton]
+    else
+      []
+  )
+  +
+  [
     params.keyboard.spaceButton,
     params.keyboard.asciiModeButton,
     params.keyboard.enterButton,
@@ -150,16 +159,29 @@ local newKeyLayout(isDark=false, isPortrait=true) =
   + basicStyle.newSystemButton(
     params.keyboard.numericButton.name,
     isDark,
-    {
-      size:
-        { width: '225/1125' },
-    } + params.keyboard.numericButton.params
+    (
+      if settings.showFunctionButton then
+        { size: { width: '191.25/1125' } }
+      else
+        { size: { width: '225/1125' } }
+    )
+    + params.keyboard.numericButton.params
   )
 
   + basicStyle.newAlphabeticButton(
     params.keyboard.commaButton.name,
     isDark,
     portraitNormalButtonSize + params.keyboard.commaButton.params + hintStyle
+  )
+  + (
+    if settings.showFunctionButton then
+      basicStyle.newAlphabeticButton(
+        params.keyboard.functionButton.name,
+        isDark,
+        portraitNormalButtonSize + params.keyboard.functionButton.params + hintStyle
+      )
+    else
+      {}
   )
   + basicStyle.newSpaceButton(
     params.keyboard.spaceButton.name,

@@ -50,4 +50,19 @@
   // 中文模式下，字母键是否大写显示
   // true 大写，false 小写
   uppercaseForChinese: true,
+
+  // 空格左侧的功能键
+  showFunctionButton: false,
+  functionButtonParams: {
+    action: { shortcut: '#selectText' },
+    systemImageName: 'selection.pin.in.out',
+
+    whenKeyboardAction: [
+      {
+        notificationKeyboardAction: { shortcut: '#selectText' },
+        action: { shortcut: '#cut' },
+        systemImageName: 'scissors',
+      }
+    ],
+  },
 }

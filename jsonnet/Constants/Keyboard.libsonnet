@@ -762,6 +762,11 @@ local settings = import '../Settings.libsonnet';
       },
     },
 
+    functionButton: {
+      name: 'functionButton',
+      params: settings.functionButtonParams,
+    },
+
     pinyinButton: {
       name: 'pinyinButton',
       params: {
