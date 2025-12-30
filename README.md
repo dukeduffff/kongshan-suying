@@ -32,7 +32,7 @@ enter 下划换行
 
 ## 自定义皮肤调整说明
 
-- `jsonnet/Settings.libsonnet`: 定义了皮肤的基本设置
+- `jsonnet/Settings.libsonnet`: 定义了皮肤的基本设置，浮动键盘中的“微调”可以直接打开该文件进行编辑。
 
   + `usePCLayout`: 是否使用 PC 布局，启用后 zxcv 行按键左移半格。
   + `spaceButtonComposingText`: 打字时空格键上显示的文字内容。
@@ -45,8 +45,11 @@ enter 下划换行
   + `toolbarPreferIcon`: 工具栏按钮以图标显示。
   + `accentColor`: 主题色选择。
   + `uppercaseForChinese`: 中文模式下，字母键是否大写显示。
+  + `segmentAction`: 分词键，用于输入方案中分词使用。
+  + `showFunctionButton`: 是否显示空格左侧的功能键。
+  + `functionButtonParams`: 空格左侧功能键的功能定义。
 
-- `jsonnet/Constants/Keyboard.libsonnet`: 定义了键盘按键，各区域高度等常量。
+- `jsonnet/Constants/Keyboard.libsonnet`: 定义了键盘按键，各区域高度等常量。浮动键盘中的“按键”可以直接打开该文件进行编辑。
 
   + 如想对按键上下划动进行调整，可在此文件中添加或修改对应按键的 `swipeUp` 或 `swipeDown` 属性。（**注意**不是 `swipeUpAction` 或 `swipeDownAction`）
 
