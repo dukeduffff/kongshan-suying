@@ -663,7 +663,32 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
       },
     },
 
-  AddKeyboardPressedEvent(): root {},
+  AddKeyboardActionEvent(newForegroundStyle):
+    local isKeyboardActionAware = std.objectHas(root.params, 'whenKeyboardAction');
+    local keyboardActionParams = if isKeyboardActionAware then root.params.whenKeyboardAction else [];
+    assert std.type(keyboardActionParams) == 'array' : 'whenKeyboardAction 必须是数组类型';
+    if !isKeyboardActionAware then
+      root
+    else root {
+      [root.name]+: {
+        notification+: [
+          root.name + 'KeyboardAction'+i+'Notification' for i in std.range(0, std.length(keyboardActionParams) - 1)
+        ]
+      },
+      reference+: {
+        [root.name + 'KeyboardAction'+i+'Notification']: {
+          notificationType: 'keyboardAction',
+          backgroundStyle: root[root.name].backgroundStyle,
+          foregroundStyle: root.name + 'KeyboardAction'+i+'ForegroundStyle',
+        } + utils.extractProperties(keyboardActionParams[i], ['action', 'lockedNotificationMatchState', 'notificationKeyboardAction'])
+        + utils.extractProperties(root.params, ['bounds'])
+        for i in std.range(0, std.length(keyboardActionParams) - 1)
+      }
+      + {
+        [root.name + 'KeyboardAction'+i+'ForegroundStyle']: newForegroundStyle(isDark, root.params + keyboardActionParams[i]),
+        for i in std.range(0, std.length(keyboardActionParams) - 1)
+      },
+    },
 
   AddRimeOptionChangeEvent(): root {},
 
@@ -692,7 +717,8 @@ local newAlphabeticButton(name, isDark=false, params={}, needHint=true, swipeTex
     .AddAnimation()
     .AddLongPress()
     .AddAsciiModeChangeEvent()
-    .AddPreeditChangeEvent(newAlphabeticButtonForegroundStyle);
+    .AddPreeditChangeEvent(newAlphabeticButtonForegroundStyle)
+    .AddKeyboardActionEvent(newAlphabeticButtonForegroundStyle);
   button.GetButton() + button.reference;
 
 local newSystemButton(name, isDark=false, params={}) =
@@ -706,7 +732,8 @@ local newSystemButton(name, isDark=false, params={}) =
     .AddCapsLockedState(newSystemButtonForegroundStyle)
     .AddLongPress()
     .AddAsciiModeChangeEvent()
-    .AddPreeditChangeEvent(newSystemButtonForegroundStyle);
+    .AddPreeditChangeEvent(newSystemButtonForegroundStyle)
+    .AddKeyboardActionEvent(newSystemButtonForegroundStyle);
   button.GetButton() + button.reference;
 
 local newColorButton(name, isDark=false, params={}) =
@@ -720,7 +747,8 @@ local newColorButton(name, isDark=false, params={}) =
     .AddCapsLockedState(newColorButtonForegroundStyle)
     .AddLongPress()
     .AddAsciiModeChangeEvent()
-    .AddPreeditChangeEvent(newColorButtonForegroundStyle);
+    .AddPreeditChangeEvent(newColorButtonForegroundStyle)
+    .AddKeyboardActionEvent(newColorButtonForegroundStyle);
   button.GetButton() + button.reference;
 
 local newSpaceButton(name, isDark=false, params={}) =
