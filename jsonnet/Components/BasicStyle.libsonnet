@@ -643,12 +643,8 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
           (
             if hasAsciiModeOffParams then
               generateNotification(asciiModeOffParams, false)
-            else {}
-          ) +
-          (
-            if hasAsciiModeOnParams then
+            else
               generateNotification(asciiModeOnParams, true)
-            else {}
           )
       },
 
