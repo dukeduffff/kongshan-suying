@@ -1322,7 +1322,7 @@ local settings = import '../Settings.libsonnet';
       },
       returnButton: {
         action: { shortcut: '#candidatesBarStateToggle' },
-        systemImageName: 'return',
+        systemImageName: 'arrow.backward',
         normalColor: colors.toolbarButtonForegroundColor,
         highlightColor: colors.toolbarButtonHighlightedForegroundColor,
         fontSize: fonts.candidateStateButtonFontSize,
