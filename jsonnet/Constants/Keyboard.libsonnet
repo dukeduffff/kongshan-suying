@@ -341,6 +341,7 @@ local settings = import '../Settings.libsonnet';
         action: { character: 'i' },
         uppercased: { action: { character: 'I' } },
         swipeUp: { action: { character: '8' } },
+        swipeDown: { action: { character: '|' } },
       },
     },
     oButton: {
@@ -349,6 +350,7 @@ local settings = import '../Settings.libsonnet';
         action: { character: 'o' },
         uppercased: { action: { character: 'O' } },
         swipeUp: { action: { character: '9' } },
+        swipeDown: { action: { character: '<' } },
       },
     },
     pButton: {
@@ -357,6 +359,7 @@ local settings = import '../Settings.libsonnet';
         action: { character: 'p' },
         uppercased: { action: { character: 'P' } },
         swipeUp: { action: { character: '0' } },
+        swipeDown: { action: { character: '>' } },
       },
     },
 
