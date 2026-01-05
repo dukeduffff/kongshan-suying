@@ -227,9 +227,6 @@ local newKeyLayout(isDark=false, isPortrait=true) =
     + basicStyle.newLongPressSymbolsSelectedBackgroundStyle(isDark, extraParams)
     + basicStyle.newButtonAnimation()
     + newKeyLayout(isDark, isPortrait)
-    + basicStyle.newSpaceButtonRimeSchemaForegroundStyle(isDark)
-    + basicStyle.newCommitCandidateForegroundStyle(isDark, { text: settings.spaceButtonComposingText })
     // Notifications
-    + basicStyle.rimeSchemaChangedNotification
-    + basicStyle.preeditChangedForSpaceButtonNotification,
+    + basicStyle.rimeSchemaChangedNotification,
 }

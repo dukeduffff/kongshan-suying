@@ -810,7 +810,5 @@ local newKeyLayout(isDark=false, isPortrait=false) =
     + basicStyle.newColorButtonBackgroundStyle(isDark)
     + basicStyle.newAlphabeticHintBackgroundStyle(isDark, { cornerRadius: 10 })
     + newKeyLayout(isDark, isPortrait)
-    + basicStyle.newCommitCandidateForegroundStyle(isDark, { text: '选定' })
     // Notifications
-    + basicStyle.preeditChangedForSpaceButtonNotification,
 }

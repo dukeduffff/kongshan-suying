@@ -242,7 +242,6 @@ local newSystemButtonForegroundStyle(isDark=false, params={}) =
   else
     newTextSystemButtonForegroundStyle(isDark, params + getKeyboardActionText(params));
 
-local spaceButtonForegroundStyleName = 'spaceButtonForegroundStyle';
 
 local spaceButtonRimeSchemaForegroundStyleName = 'spaceButtonRimeSchemaForegroundStyle';
 local newSpaceButtonRimeSchemaForegroundStyle(isDark=false) =
@@ -259,6 +258,7 @@ local newSpaceButtonRimeSchemaForegroundStyle(isDark=false) =
   else
   {};
 
+local spaceButtonForegroundStyleName = 'spaceButtonForegroundStyle';
 local spaceButtonForegroundStyle = [
   spaceButtonForegroundStyleName,
 ]
@@ -784,64 +784,6 @@ local newColorButton(name, isDark=false, params={}) =
     .AddKeyboardActionEvent(newColorButtonForegroundStyle);
   button.GetButton() + button.reference;
 
-local newSpaceButton(name, isDark=false, params={}) =
-  {
-    [name]: utils.newBackgroundStyle(style=alphabeticButtonBackgroundStyleName)
-            + (
-              if std.objectHas(params, 'foregroundStyle') then
-                { foregroundStyle: params.foregroundStyle }
-              else
-                utils.newForegroundStyle(style=name + 'ForegroundStyle')
-            )
-            + (
-              if std.objectHas(params, 'uppercasedStateAction') then
-                utils.newForegroundStyle('uppercasedStateForegroundStyle', name + 'UppercaseForegroundStyle')
-              else {}
-            )
-            + (
-              if std.objectHas(params, 'swipeUp') then
-                { swipeUpAction: params.swipeUp.action }
-              else {}
-            )
-            + (
-              if std.objectHas(params, 'swipeDown') then
-                { swipeDownAction: params.swipeDown.action }
-              else {}
-            )
-            + utils.newAnimation(animation=[buttonAnimationName])
-            + utils.extractProperties(
-              params,
-              [
-                'size',
-                'bounds',
-                'action',
-                'uppercasedStateAction',
-                'repeatAction',
-                'preeditStateAction',
-                'capsLockedStateForegroundStyle',
-                'preeditStateForegroundStyle',
-                'notification',
-              ]
-            ),
-  }
-  + {
-    [spaceButtonForegroundStyleName]: newAlphabeticButtonForegroundStyle(isDark, params),
-  }
-  + (
-    if settings.spaceButtonShowSchema then
-      {
-        [spaceButtonRimeSchemaForegroundStyleName]: newSpaceButtonRimeSchemaForegroundStyle(isDark),
-      }
-    else {}
-  )
-  + (
-    if std.objectHas(params, 'uppercasedStateAction') then
-      {
-        [name + 'UppercaseForegroundStyle']: newAlphabeticButtonUppercaseForegroundStyle(isDark, params + getKeyboardActionText(params, 'uppercasedStateAction')),
-      }
-    else {}
-  );
-
 local newSymbolicCollection(name, isDark=false, params={}) =
   {
     [name]: utils.newBackgroundStyle(style=systemButtonBackgroundStyleName)
@@ -878,23 +820,6 @@ local rimeSchemaChangedNotification =
   }
   else
   {};
-
-local commitCandidateForegroundStyleName = 'commitCandidateForegroundStyle';
-local preeditChangedForSpaceButtonNotification = {
-  preeditChangedForSpaceButtonNotification: {
-    notificationType: 'preeditChanged',
-    backgroundStyle: alphabeticButtonBackgroundStyleName,
-    foregroundStyle: commitCandidateForegroundStyleName,
-  },
-};
-
-local newCommitCandidateForegroundStyle(isDark=false, params={}) = {
-  [commitCandidateForegroundStyleName]: utils.newTextStyle({
-    normalColor: colors.standardButtonForegroundColor,
-    highlightColor: colors.standardButtonHighlightedForegroundColor,
-    fontSize: fonts.systemButtonTextFontSize,
-  } + params, isDark) + params,
-};
 
 
 {
@@ -950,14 +875,9 @@ local newCommitCandidateForegroundStyle(isDark=false, params={}) = {
 
   newSymbolicCollection: newSymbolicCollection,
 
-  newSpaceButton: newSpaceButton,
   spaceButtonForegroundStyle: spaceButtonForegroundStyle,
-  spaceButtonRimeSchemaForegroundStyleName: spaceButtonRimeSchemaForegroundStyleName,
   newSpaceButtonRimeSchemaForegroundStyle: newSpaceButtonRimeSchemaForegroundStyle,
-
-  newCommitCandidateForegroundStyle: newCommitCandidateForegroundStyle,
 
   // notification
   rimeSchemaChangedNotification: rimeSchemaChangedNotification,
-  preeditChangedForSpaceButtonNotification: preeditChangedForSpaceButtonNotification,
 }
