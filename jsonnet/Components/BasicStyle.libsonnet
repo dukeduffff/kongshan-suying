@@ -704,7 +704,9 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
     assert std.type(keyboardActionParams) == 'array' : 'whenKeyboardAction 必须是数组类型';
     if !isKeyboardActionAware then
       root
-    else root {
+    else
+      local needUpdateHintStyle = std.objectHas(root[root.name], 'hintStyle');
+      root {
       [root.name]+: {
         notification+: [
           root.name + 'KeyboardAction'+i+'Notification' for i in std.range(0, std.length(keyboardActionParams) - 1)
@@ -717,12 +719,35 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
           foregroundStyle: root.name + 'KeyboardAction'+i+'ForegroundStyle',
         } + utils.extractProperties(keyboardActionParams[i], ['action', 'lockedNotificationMatchState', 'notificationKeyboardAction'])
         + utils.extractProperties(root.params, ['bounds'])
+        + (
+          if needUpdateHintStyle then
+            {
+              hintStyle: root.name + 'KeyboardAction'+i+'HintStyle',
+            }
+          else {}
+        )
         for i in std.range(0, std.length(keyboardActionParams) - 1)
       }
       + {
         [root.name + 'KeyboardAction'+i+'ForegroundStyle']: newForegroundStyle(root.isDark, root.params + keyboardActionParams[i]),
         for i in std.range(0, std.length(keyboardActionParams) - 1)
-      },
+      } + (
+        if needUpdateHintStyle then
+          {
+            [root.name + 'KeyboardAction'+i+'HintStyle']: (
+              if std.objectHas(root.params, 'hintStyle') then
+                root.params.hintStyle
+              else
+                {}
+            ) + utils.newBackgroundStyle(style=alphabeticHintBackgroundStyleName)
+              + utils.newForegroundStyle(style=root.name + 'KeyboardAction'+i+'HintForegroundStyle'),
+            for i in std.range(0, std.length(keyboardActionParams) - 1)
+          } + {
+            [root.name + 'KeyboardAction'+i+'HintForegroundStyle']: newAlphabeticButtonHintStyle(root.isDark, keyboardActionParams[i]),
+            for i in std.range(0, std.length(keyboardActionParams) - 1)
+          }
+        else {}
+      ),
     },
 
   AddRimeOptionChangeEvent(): root {},
