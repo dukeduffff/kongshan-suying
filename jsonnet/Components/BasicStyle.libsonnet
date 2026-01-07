@@ -431,25 +431,25 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
 
   AddHintStyle(needHint):
     assert type == 'alphabetic' : '只有字母键才支持提示样式';
-  if !needHint then
-    root
-  else
-  root {
-    [root.name]+: {
-      hintStyle: root.name + 'HintStyle',
+    if !needHint then
+      root
+    else
+    root {
+      [root.name]+: {
+        hintStyle: root.name + 'HintStyle',
+      },
+      reference+: {
+        [root.name + 'HintStyle']: (
+              if std.objectHas(root.params, 'hintStyle') then
+                root.params.hintStyle
+              else
+                {}
+            )
+            + utils.newBackgroundStyle(style=alphabeticHintBackgroundStyleName)
+            + utils.newForegroundStyle(style=root.name + 'HintForegroundStyle'),
+        [root.name + 'HintForegroundStyle']: newAlphabeticButtonHintStyle(root.isDark, utils.excludeProperties(root.params, ['center'])),
+      },
     },
-    reference+: {
-      [root.name + 'HintStyle']: (
-            if std.objectHas(root.params, 'hintStyle') then
-              root.params.hintStyle
-            else
-              {}
-          )
-          + utils.newBackgroundStyle(style=alphabeticHintBackgroundStyleName)
-          + utils.newForegroundStyle(style=root.name + 'HintForegroundStyle'),
-      [root.name + 'HintForegroundStyle']: newAlphabeticButtonHintStyle(root.isDark, utils.excludeProperties(root.params, ['center'])),
-    },
-  },
 
   AddPropertiesInParams(): root {
     [root.name]+: utils.extractProperties(
@@ -465,52 +465,52 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
   },
 
   AddSwipeUp(showSwipeText):
-  local hasSwipeUpParams = std.objectHas(root.params, 'swipeUp');
-  local swipeUpParams = if hasSwipeUpParams then root.params.swipeUp else {};
-  if !hasSwipeUpParams then
-    root
-  else
-    root {
-      [root.name]+: {
-          [if std.objectHas(swipeUpParams, 'action') then 'swipeUpAction']: swipeUpParams.action,
-          [if showSwipeText then 'foregroundStyle']+: [generateSwipeForegroundStyleName(root.name, 'Up')],
-        },
-      reference+: {
-          [if showSwipeText then generateSwipeForegroundStyleName(root.name, 'Up')]:
-            newAlphabeticButtonAlternativeForegroundStyle(root.isDark, { center: swipeTextCenter.up } + swipeUpParams),
-        }
-        + (if std.objectHas(root[root.name], 'hintStyle') then {
-            [root.name + 'HintStyle']+: {
-              swipeUpForegroundStyle: root.name + 'SwipeUpHintForegroundStyle',
-            },
-            [root.name + 'SwipeUpHintForegroundStyle']: newAlphabeticButtonHintStyle(root.isDark, swipeUpParams),
-          } else {}
-        ),
-    },
+    local hasSwipeUpParams = std.objectHas(root.params, 'swipeUp');
+    local swipeUpParams = if hasSwipeUpParams then root.params.swipeUp else {};
+    if !hasSwipeUpParams then
+      root
+    else
+      root {
+        [root.name]+: {
+            [if std.objectHas(swipeUpParams, 'action') then 'swipeUpAction']: swipeUpParams.action,
+            [if showSwipeText then 'foregroundStyle']+: [generateSwipeForegroundStyleName(root.name, 'Up')],
+          },
+        reference+: {
+            [if showSwipeText then generateSwipeForegroundStyleName(root.name, 'Up')]:
+              newAlphabeticButtonAlternativeForegroundStyle(root.isDark, { center: swipeTextCenter.up } + swipeUpParams),
+          }
+          + (if std.objectHas(root[root.name], 'hintStyle') then {
+              [root.name + 'HintStyle']+: {
+                swipeUpForegroundStyle: root.name + 'SwipeUpHintForegroundStyle',
+              },
+              [root.name + 'SwipeUpHintForegroundStyle']: newAlphabeticButtonHintStyle(root.isDark, swipeUpParams),
+            } else {}
+          ),
+      },
 
   AddSwipeDown(showSwipeText):
-  local hasSwipeDownParams = std.objectHas(root.params, 'swipeDown');
-  local swipeDownParams = if hasSwipeDownParams then root.params.swipeDown else {};
-  if !hasSwipeDownParams then
-    root
-  else
-    root {
-      [root.name]+: {
-          [if std.objectHas(swipeDownParams, 'action') then 'swipeDownAction']: swipeDownParams.action,
-          [if showSwipeText then 'foregroundStyle']+: [generateSwipeForegroundStyleName(root.name, 'Down')],
-        },
-      reference+: {
-          [if showSwipeText then generateSwipeForegroundStyleName(root.name, 'Down')]:
-            newAlphabeticButtonAlternativeForegroundStyle(root.isDark, { center: swipeTextCenter.down } + swipeDownParams),
-        }
-        + (if std.objectHas(root[root.name], 'hintStyle') then {
-            [root.name + 'HintStyle']+: {
-              swipeDownForegroundStyle: root.name + 'SwipeDownHintForegroundStyle',
-            },
-            [root.name + 'SwipeDownHintForegroundStyle']: newAlphabeticButtonHintStyle(root.isDark, swipeDownParams),
-          } else {}
-        ),
-    },
+    local hasSwipeDownParams = std.objectHas(root.params, 'swipeDown');
+    local swipeDownParams = if hasSwipeDownParams then root.params.swipeDown else {};
+    if !hasSwipeDownParams then
+      root
+    else
+      root {
+        [root.name]+: {
+            [if std.objectHas(swipeDownParams, 'action') then 'swipeDownAction']: swipeDownParams.action,
+            [if showSwipeText then 'foregroundStyle']+: [generateSwipeForegroundStyleName(root.name, 'Down')],
+          },
+        reference+: {
+            [if showSwipeText then generateSwipeForegroundStyleName(root.name, 'Down')]:
+              newAlphabeticButtonAlternativeForegroundStyle(root.isDark, { center: swipeTextCenter.down } + swipeDownParams),
+          }
+          + (if std.objectHas(root[root.name], 'hintStyle') then {
+              [root.name + 'HintStyle']+: {
+                swipeDownForegroundStyle: root.name + 'SwipeDownHintForegroundStyle',
+              },
+              [root.name + 'SwipeDownHintForegroundStyle']: newAlphabeticButtonHintStyle(root.isDark, swipeDownParams),
+            } else {}
+          ),
+      },
 
   AddUppercasedState(newButtonUppercasedForegroundStyle):
     local hasUppercasedParams = std.objectHas(root.params, 'uppercased');
