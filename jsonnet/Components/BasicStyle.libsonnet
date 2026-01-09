@@ -429,6 +429,35 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
       else {}) + foregroundStyle,
     },
 
+  // 内部调用函数，外面不要调用
+  CreateHintStyleReference(hintStyleName, param):
+    local hintForegroundStyleName = hintStyleName[:-5] + 'Foreground' + hintStyleName[-5:];
+    local swipeUpHintForegroundStyleName = if std.objectHas(param, 'swipeUp') then hintStyleName[:-5] + 'SwipeUpForeground' + hintStyleName[-5:] else null;
+    local swipeDownHintForegroundStyleName = if std.objectHas(param, 'swipeDown') then hintStyleName[:-5] + 'SwipeDownForeground' + hintStyleName[-5:] else null;
+    {
+      [hintStyleName]: (
+            if std.objectHas(root.params, 'hintStyle') then
+              root.params.hintStyle
+            else
+              {}
+          )
+          + utils.newBackgroundStyle(style=alphabeticHintBackgroundStyleName)
+          + utils.newForegroundStyle(style=hintForegroundStyleName)
+          + (
+            if std.objectHas(param, 'swipeUp') then
+              utils.newForegroundStyle(styleName='swipeUpForegroundStyle', style=swipeUpHintForegroundStyleName)
+            else {}
+          )
+          + (
+            if std.objectHas(param, 'swipeUp') then
+              utils.newForegroundStyle(styleName='swipeDownForegroundStyle', style=swipeDownHintForegroundStyleName)
+            else {}
+          ),
+      [hintForegroundStyleName]: newAlphabeticButtonHintStyle(root.isDark, utils.excludeProperties(param, ['center'])),
+      [swipeUpHintForegroundStyleName]: newAlphabeticButtonHintStyle(root.isDark, utils.excludeProperties(param.swipeUp, ['center'])),
+      [swipeDownHintForegroundStyleName]: newAlphabeticButtonHintStyle(root.isDark, utils.excludeProperties(param.swipeDown, ['center'])),
+    },
+
   AddHintStyle(needHint):
     assert type == 'alphabetic' : '只有字母键才支持提示样式';
     if !needHint then
@@ -438,17 +467,7 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
       [root.name]+: {
         hintStyle: root.name + 'HintStyle',
       },
-      reference+: {
-        [root.name + 'HintStyle']: (
-              if std.objectHas(root.params, 'hintStyle') then
-                root.params.hintStyle
-              else
-                {}
-            )
-            + utils.newBackgroundStyle(style=alphabeticHintBackgroundStyleName)
-            + utils.newForegroundStyle(style=root.name + 'HintForegroundStyle'),
-        [root.name + 'HintForegroundStyle']: newAlphabeticButtonHintStyle(root.isDark, utils.excludeProperties(root.params, ['center'])),
-      },
+      reference+: root.CreateHintStyleReference(root.name + 'HintStyle', root.params),
     },
 
   AddPropertiesInParams(): root {
@@ -478,14 +497,7 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
         reference+: {
             [if showSwipeText then generateSwipeForegroundStyleName(root.name, 'Up')]:
               newAlphabeticButtonAlternativeForegroundStyle(root.isDark, { center: swipeTextCenter.up } + swipeUpParams),
-          }
-          + (if std.objectHas(root[root.name], 'hintStyle') then {
-              [root.name + 'HintStyle']+: {
-                swipeUpForegroundStyle: root.name + 'SwipeUpHintForegroundStyle',
-              },
-              [root.name + 'SwipeUpHintForegroundStyle']: newAlphabeticButtonHintStyle(root.isDark, swipeUpParams),
-            } else {}
-          ),
+          },
       },
 
   AddSwipeDown(showSwipeText):
@@ -502,14 +514,7 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
         reference+: {
             [if showSwipeText then generateSwipeForegroundStyleName(root.name, 'Down')]:
               newAlphabeticButtonAlternativeForegroundStyle(root.isDark, { center: swipeTextCenter.down } + swipeDownParams),
-          }
-          + (if std.objectHas(root[root.name], 'hintStyle') then {
-              [root.name + 'HintStyle']+: {
-                swipeDownForegroundStyle: root.name + 'SwipeDownHintForegroundStyle',
-              },
-              [root.name + 'SwipeDownHintForegroundStyle']: newAlphabeticButtonHintStyle(root.isDark, swipeDownParams),
-            } else {}
-          ),
+          },
       },
 
   AddUppercasedState(newButtonUppercasedForegroundStyle):
@@ -631,6 +636,7 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
           [if std.objectHas(asciiModeOffParams, 'swipeDown') then generateSwipeForegroundStyleName(root.name, 'Down')]: generateSwipeForegroundStyleName(root.name, 'Down', 'AsciiModeOff'),
         }
       );
+      local needUpdateHintStyle = std.objectHas(root[root.name], 'hintStyle');
       root {
         [root.name]+: {
           foregroundStyle: [
@@ -652,22 +658,27 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
         },
         reference+:
           local generateNotification(asciiModeParams, valueIsOn) =
+            local asciiModeValue = if valueIsOn then 'On' else 'Off';
             utils.newAsciiModeChangedNotification(root.name, valueIsOn, {
               backgroundStyleName: root[root.name].backgroundStyle,
               foregroundStyleName: if valueIsOn then asciiModeOnForeground else asciiModeOffForeground,
               [if std.objectHas(asciiModeParams, 'action') then 'action']: asciiModeParams.action,
               [if std.objectHas(asciiModeParams, 'swipeUp') && std.objectHas(asciiModeParams.swipeUp, 'action') then 'swipeUpAction']: asciiModeParams.swipeUp.action,
               [if std.objectHas(asciiModeParams, 'swipeDown') && std.objectHas(asciiModeParams.swipeDown, 'action') then 'swipeDownAction']: asciiModeParams.swipeDown.action,
+              [if needUpdateHintStyle then 'hintStyle']: root.name + 'AsciiMode' + asciiModeValue + 'HintStyle',
             } + utils.extractProperties(root.params, ['bounds'])
             + utils.extractProperties(root[root.name], ['capsLockedStateForegroundStyle', 'uppercasedStateForegroundStyle']))
             + {
               [utils.asciiModeForegroundStyleName(root.name, valueIsOn)]: newAlphabeticButtonForegroundStyle(root.isDark, root.params + asciiModeParams),
             }
-            + local asciiModeValue = if valueIsOn then 'On' else 'Off';
-            {
+            + {
               [if std.objectHas(asciiModeParams, 'swipeUp') then generateSwipeForegroundStyleName(root.name, 'Up', 'AsciiMode' + asciiModeValue)]: newAlphabeticButtonAlternativeForegroundStyle(root.isDark, { center: swipeTextCenter.up } + asciiModeParams.swipeUp),
               [if std.objectHas(asciiModeParams, 'swipeDown') then generateSwipeForegroundStyleName(root.name, 'Down', 'AsciiMode' + asciiModeValue)]: newAlphabeticButtonAlternativeForegroundStyle(root.isDark, { center: swipeTextCenter.down } + asciiModeParams.swipeDown),
-            };
+            } + (
+              if needUpdateHintStyle then
+                root.CreateHintStyleReference(root.name + 'AsciiMode' + asciiModeValue + 'HintStyle', root.params + asciiModeParams)
+              else {}
+            );
           (
             if hasAsciiModeOffParams then
               generateNotification(asciiModeOffParams, false)
@@ -694,22 +705,15 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
           notificationType: 'preeditChanged',
           backgroundStyle: root[root.name].backgroundStyle,
           foregroundStyle: root.name + 'PreeditChangedForegroundStyle',
-          [if needUpdateHintStyle then 'hintStyle']: root.name + 'PreeditChangedHintStyle',
         }
         + utils.extractProperties(preeditChangedParams, ['action']),
         [root.name + 'PreeditChangedForegroundStyle']: newForegroundStyle(root.isDark, preeditChangedParams),
       } + (
         if needUpdateHintStyle then
           {
-            [root.name + 'PreeditChangedHintStyle']: (
-              if std.objectHas(root.params, 'hintStyle') then
-                root.params.hintStyle
-              else
-                {}
-            ) + utils.newBackgroundStyle(style=alphabeticHintBackgroundStyleName)
-              + utils.newForegroundStyle(style=root.name + 'PreeditChangedHintForegroundStyle'),
-            [root.name + 'PreeditChangedHintForegroundStyle']: newAlphabeticButtonHintStyle(root.isDark, preeditChangedParams),
-          }
+            hintStyle: root.name + 'PreeditChangedHintStyle',
+          } +
+          root.CreateHintStyleReference(root.name + 'PreeditChangedHintStyle', preeditChangedParams)
         else {}
       ),
     },
@@ -749,19 +753,14 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
         for i in std.range(0, std.length(keyboardActionParams) - 1)
       } + (
         if needUpdateHintStyle then
-          {
-            [root.name + 'KeyboardAction'+i+'HintStyle']: (
-              if std.objectHas(root.params, 'hintStyle') then
-                root.params.hintStyle
-              else
-                {}
-            ) + utils.newBackgroundStyle(style=alphabeticHintBackgroundStyleName)
-              + utils.newForegroundStyle(style=root.name + 'KeyboardAction'+i+'HintForegroundStyle'),
-            for i in std.range(0, std.length(keyboardActionParams) - 1)
-          } + {
-            [root.name + 'KeyboardAction'+i+'HintForegroundStyle']: newAlphabeticButtonHintStyle(root.isDark, keyboardActionParams[i]),
-            for i in std.range(0, std.length(keyboardActionParams) - 1)
-          }
+          local hintStyleList = [
+            root.CreateHintStyleReference(root.name + 'KeyboardAction'+i+'HintStyle', keyboardActionParams[i]) for i in std.range(0, std.length(keyboardActionParams) - 1)
+          ];
+          std.foldl(
+            function(x, y) x + y,
+            hintStyleList,
+            {}
+          )
         else {}
       ),
     },
