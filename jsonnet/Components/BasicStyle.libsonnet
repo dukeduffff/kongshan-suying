@@ -449,7 +449,7 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
             else {}
           )
           + (
-            if std.objectHas(param, 'swipeUp') then
+            if std.objectHas(param, 'swipeDown') then
               utils.newForegroundStyle(styleName='swipeDownForegroundStyle', style=swipeDownHintForegroundStyleName)
             else {}
           ),
