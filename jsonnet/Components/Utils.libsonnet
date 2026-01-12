@@ -245,6 +245,8 @@ local newAsciiModeChangedNotification(name, value, params={}) = {  // value is t
     params,
     [
       'action',
+      'swipeUpAction',
+      'swipeDownAction',
       'bounds',
       'hintStyle',
       'hintSymbolsStyle',
