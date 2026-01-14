@@ -1,10 +1,4 @@
-# 「空山素影」
-
-皮肤文件通过 `Jsonnet` 语法编写，在手机端首次使用时请执行「运行 main.jsonnet」进行编译生成皮肤配置文件。
-
-PC 端编译时需要安装 `jsonnet` 等命令行工具。
-
-## 皮肤特点
+# 「空山素影」皮肤特点
 - 不包含图片资源，风格接近原生键盘。
 - 支持 PC 布局，适合习惯 PC 键盘布局的用户使用。
 - 使用 RIME 的 `ascii_mode` 进行中英文切换。
@@ -58,6 +52,8 @@ enter 上划行首，下划行尾，长按换行
 长按皮肤，选择「运行 main.jsonnet」
 
 ## PC 端编译
+
+PC 端编译时需要安装 `jsonnet` 等命令行工具。
 
 ```shell
 jsonnet -S -m . --tla-code debug=true .\jsonnet\main.jsonnet
