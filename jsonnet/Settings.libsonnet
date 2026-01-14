@@ -8,7 +8,7 @@
   # 是否使用类似 PC 键盘的布局
   # 即，ZXCVBNM 这一行向左移半个键位宽度
   # true 左移半格，false 不左移
-  usePCLayout: true,
+  usePCLayout: false,
 
 
   # 输入时空格键上的内容，支持固定内容和变量
