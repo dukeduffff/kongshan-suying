@@ -285,6 +285,10 @@ local settings = import '../Settings.libsonnet';
         action: { character: 'q' },
         uppercased: { action: { character: 'Q' } },
         swipeUp: { action: { character: '1' } },
+        swipeDown: {
+          action: 'tab',
+          systemImageName: 'arrow.right.to.line'
+        },
       },
     },
     wButton: {
