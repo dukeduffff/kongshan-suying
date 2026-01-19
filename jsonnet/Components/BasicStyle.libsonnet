@@ -727,6 +727,7 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
       local keyboardActionParams = if isKeyboardActionAware then root.params.whenKeyboardAction else [];
       assert std.type(keyboardActionParams) == 'array' : 'whenKeyboardAction 必须是数组类型';
       local needUpdateHintStyle = std.objectHas(root[root.name], 'hintStyle');
+      local oldForegroundStyle = if std.type(root[root.name].foregroundStyle[0]) == 'string' then root[root.name].foregroundStyle else root[root.name].foregroundStyle[0].styleName;
       root {
       [root.name]+: {
         notification+: [
@@ -737,7 +738,16 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
         [root.name + 'KeyboardAction'+i+'Notification']: {
           notificationType: 'keyboardAction',
           backgroundStyle: if std.objectHas(keyboardActionParams[i], 'backgroundStyle') then keyboardActionParams[i].backgroundStyle else root[root.name].backgroundStyle,
-          foregroundStyle: root.name + 'KeyboardAction'+i+'ForegroundStyle',
+          foregroundStyle: replaceGivenPairs(
+            oldForegroundStyle,
+            {
+              [root.name + 'ForegroundStyle']: root.name + 'KeyboardAction'+i+'ForegroundStyle',
+              [if std.objectHas(keyboardActionParams[i], 'swipeUp') then generateSwipeForegroundStyleName(root.name, 'Up')]: generateSwipeForegroundStyleName(root.name, 'Up', 'KeyboardAction'+i),
+              [if std.objectHas(keyboardActionParams[i], 'swipeDown') then generateSwipeForegroundStyleName(root.name, 'Down')]: generateSwipeForegroundStyleName(root.name, 'Down', 'KeyboardAction'+i),
+            }
+          ),
+          [if std.objectHas(keyboardActionParams[i], 'swipeUp') && std.objectHas(keyboardActionParams[i].swipeUp, 'action') then 'swipeUpAction']: keyboardActionParams[i].swipeUp.action,
+          [if std.objectHas(keyboardActionParams[i], 'swipeDown') && std.objectHas(keyboardActionParams[i].swipeDown, 'action') then 'swipeDownAction']: keyboardActionParams[i].swipeDown.action,
         } + utils.extractProperties(keyboardActionParams[i], ['action', 'lockedNotificationMatchState', 'notificationKeyboardAction'])
         + utils.extractProperties(root.params, ['bounds'])
         + (
@@ -763,7 +773,14 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
             {}
           )
         else {}
-      ),
+      )
+      + {
+        [if std.objectHas(keyboardActionParams[i], 'swipeUp') then generateSwipeForegroundStyleName(root.name, 'Up', 'KeyboardAction'+i)]: newAlphabeticButtonAlternativeForegroundStyle(root.isDark, { center: swipeTextCenter.up } + keyboardActionParams[i].swipeUp),
+        for i in std.range(0, std.length(keyboardActionParams) - 1)
+      } + {
+        [if std.objectHas(keyboardActionParams[i], 'swipeDown') then generateSwipeForegroundStyleName(root.name, 'Down', 'KeyboardAction'+i)]: newAlphabeticButtonAlternativeForegroundStyle(root.isDark, { center: swipeTextCenter.down } + keyboardActionParams[i].swipeDown),
+        for i in std.range(0, std.length(keyboardActionParams) - 1)
+      },
     },
 
   AddRimeOptionChangeEvent(): root {},
