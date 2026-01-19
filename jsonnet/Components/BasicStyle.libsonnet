@@ -704,7 +704,7 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
       reference+: {
         [root.name + 'PreeditChangedNotification']: {
           notificationType: 'preeditChanged',
-          backgroundStyle: root[root.name].backgroundStyle,
+          backgroundStyle: if std.objectHas(preeditChangedParams, 'backgroundStyle') then preeditChangedParams.backgroundStyle else root[root.name].backgroundStyle,
           foregroundStyle: root.name + 'PreeditChangedForegroundStyle',
         }
         + utils.extractProperties(preeditChangedParams, ['action']),
@@ -736,7 +736,7 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
       reference+: {
         [root.name + 'KeyboardAction'+i+'Notification']: {
           notificationType: 'keyboardAction',
-          backgroundStyle: root[root.name].backgroundStyle,
+          backgroundStyle: if std.objectHas(keyboardActionParams[i], 'backgroundStyle') then keyboardActionParams[i].backgroundStyle else root[root.name].backgroundStyle,
           foregroundStyle: root.name + 'KeyboardAction'+i+'ForegroundStyle',
         } + utils.extractProperties(keyboardActionParams[i], ['action', 'lockedNotificationMatchState', 'notificationKeyboardAction'])
         + utils.extractProperties(root.params, ['bounds'])
