@@ -485,10 +485,10 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
 
   AddSwipeUp(showSwipeText):
     local hasSwipeUpParams = std.objectHas(root.params, 'swipeUp');
-    local swipeUpParams = if hasSwipeUpParams then root.params.swipeUp else {};
     if !hasSwipeUpParams then
       root
     else
+      local swipeUpParams = if hasSwipeUpParams then root.params.swipeUp else {};
       root {
         [root.name]+: {
             [if std.objectHas(swipeUpParams, 'action') then 'swipeUpAction']: swipeUpParams.action,
@@ -502,10 +502,10 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
 
   AddSwipeDown(showSwipeText):
     local hasSwipeDownParams = std.objectHas(root.params, 'swipeDown');
-    local swipeDownParams = if hasSwipeDownParams then root.params.swipeDown else {};
     if !hasSwipeDownParams then
       root
     else
+      local swipeDownParams = if hasSwipeDownParams then root.params.swipeDown else {};
       root {
         [root.name]+: {
             [if std.objectHas(swipeDownParams, 'action') then 'swipeDownAction']: swipeDownParams.action,
@@ -519,10 +519,10 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
 
   AddUppercasedState(newButtonUppercasedForegroundStyle):
     local hasUppercasedParams = std.objectHas(root.params, 'uppercased');
-    local uppercasedParams = if hasUppercasedParams then root.params.uppercased else {};
     if !hasUppercasedParams then
       root
     else
+      local uppercasedParams = if hasUppercasedParams then root.params.uppercased else {};
       root {
         [root.name]+:
         local oldForegroundStyle = root[root.name].foregroundStyle;
@@ -541,10 +541,10 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
 
   AddCapsLockedState(newButtonCapsLockedForegroundStyle):
     local hasCapsLockedParams = std.objectHas(root.params, 'capsLocked');
-    local capsLockedParams = if hasCapsLockedParams then root.params.capsLocked else {};
     if !hasCapsLockedParams then
       root
     else
+      local capsLockedParams = if hasCapsLockedParams then root.params.capsLocked else {};
       root {
         [root.name]+: {
           capsLockedStateForegroundStyle: root.name + 'CapsLockedForegroundStyle',
@@ -556,10 +556,11 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
 
   AddLongPress():
     local hasLongPressParams = std.objectHas(root.params, 'longPress');
-    local longPressParams = if hasLongPressParams then root.params.longPress else {};
     if !hasLongPressParams then
       root
     else
+      local longPressParams = if hasLongPressParams then root.params.longPress else [];
+      assert std.type(longPressParams) == 'array' : 'longPress 必须是数组类型';
       root {
         [root.name]+: {
           hintSymbolsStyle: root.name + 'LongPressSymbolsStyle',
@@ -689,10 +690,10 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
 
   AddPreeditChangeEvent(newForegroundStyle):
     local isPreeditModeAware = std.objectHas(root.params, 'whenPreeditChanged');
-    local preeditChangedParams = if isPreeditModeAware then root.params.whenPreeditChanged else {};
     if !isPreeditModeAware then
       root
     else
+      local preeditChangedParams = if isPreeditModeAware then root.params.whenPreeditChanged else {};
       local needUpdateHintStyle = std.objectHas(root[root.name], 'hintStyle');
       root {
       [root.name]+: {
@@ -720,11 +721,11 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
 
   AddKeyboardActionEvent(newForegroundStyle):
     local isKeyboardActionAware = std.objectHas(root.params, 'whenKeyboardAction');
-    local keyboardActionParams = if isKeyboardActionAware then root.params.whenKeyboardAction else [];
-    assert std.type(keyboardActionParams) == 'array' : 'whenKeyboardAction 必须是数组类型';
     if !isKeyboardActionAware then
       root
     else
+      local keyboardActionParams = if isKeyboardActionAware then root.params.whenKeyboardAction else [];
+      assert std.type(keyboardActionParams) == 'array' : 'whenKeyboardAction 必须是数组类型';
       local needUpdateHintStyle = std.objectHas(root[root.name], 'hintStyle');
       root {
       [root.name]+: {
