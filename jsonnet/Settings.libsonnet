@@ -16,7 +16,7 @@
   # $rimePreedit：Rime 预编辑文本
   # $rimeCandidate：Rime 首个候选字
   # $rimeCandidateComment: Rime 首个候选字的 comment 信息
-  spaceButtonComposingText: '$rimeCandidate',
+  spaceButtonComposingText: '选定',
 
 
   # 是否在空格键上显示方案名称
