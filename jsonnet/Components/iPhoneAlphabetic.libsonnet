@@ -90,33 +90,13 @@ local getAlphabeticButtonSize(name) =
     portraitNormalButtonSize
   );
 
-
-// 递归地将所有键名 character 替换为 symbol
-local repalceCharacterToSymbolRecursive(params) =
-  if std.isObject(params) then
-    std.foldl(
-      function(acc, key)
-        acc + (
-            if key == 'character' then
-              { symbol: params[key] }
-            else
-              { [key]: repalceCharacterToSymbolRecursive(params[key]), }
-       ),
-      std.objectFields(params),
-      {},
-    )
-  else if std.isArray(params) then
-    std.map(repalceCharacterToSymbolRecursive, params)
-  else
-    params;
-
 // 英文键盘下，对按键的 params 进行处理
 // 1. 将 character 替换为 symbol
 //    处理方式为 params = repalceCharacterToSymbolRecursive(params)
 // 2. 将 params 中的 whenAlphabetic 合并到 params
 //    处理方式为 params = std.objectRemoveKey(params + std.get(params, 'whenAlphabetic', default={}), 'whenAlphabetic') 的内容
 local processAlphabeticButtonParams(params) =
-  local paramsWithSymbol = repalceCharacterToSymbolRecursive(params);
+  local paramsWithSymbol = utils.repalceCharacterToSymbolRecursive(params);
   utils.deepMerge(paramsWithSymbol, std.get(paramsWithSymbol, 'whenAlphabetic', default={}));
 
 

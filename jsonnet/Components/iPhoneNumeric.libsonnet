@@ -5,6 +5,7 @@ local basicStyle = import 'BasicStyle.libsonnet';
 local preedit = import 'Preedit.libsonnet';
 local toolbar = import 'Toolbar.libsonnet';
 local utils = import 'Utils.libsonnet';
+local settings = import '../Settings.libsonnet';
 
 // 窄 VStack 宽度样式
 local narrowVStackStyle = {
@@ -149,9 +150,15 @@ local newKeyLayout(isDark=false, isPortrait=false, extraParams={}) =
       basicStyle.newAlphabeticButton(
         button.name,
         isDark,
-        button.params + {
+        {
           fontSize: fonts.numericButtonTextFontSize,
-        },
+        }
+        + (
+          if settings.keyboardLayout=='9' then
+            utils.repalceCharacterToSymbolRecursive(button.params)
+          else
+            button.params
+        ),
         needHint=false,
       ),
     numeric9Buttons.numericButtons,

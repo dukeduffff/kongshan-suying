@@ -256,6 +256,25 @@ local newAsciiModeChangedNotification(name, value, params={}) = {  // value is t
   ),
 };
 
+// 递归地将所有键名 character 替换为 symbol
+local repalceCharacterToSymbolRecursive(params) =
+  if std.isObject(params) then
+    std.foldl(
+      function(acc, key)
+        acc + (
+            if key == 'character' then
+              { symbol: params[key] }
+            else
+              { [key]: repalceCharacterToSymbolRecursive(params[key]), }
+       ),
+      std.objectFields(params),
+      {},
+    )
+  else if std.isArray(params) then
+    std.map(repalceCharacterToSymbolRecursive, params)
+  else
+    params;
+
 {
   extractProperty: extractProperty,
   extractProperties: extractProperties,
@@ -276,4 +295,5 @@ local newAsciiModeChangedNotification(name, value, params={}) = {  // value is t
   newAsciiModeForegroundStyle: newAsciiModeForegroundStyle,
   asciiModeChangedNotificationName: asciiModeChangedNotificationName,
   newAsciiModeChangedNotification: newAsciiModeChangedNotification,
+  repalceCharacterToSymbolRecursive: repalceCharacterToSymbolRecursive,
 }
