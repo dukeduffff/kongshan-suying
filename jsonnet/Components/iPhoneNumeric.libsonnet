@@ -1,4 +1,5 @@
-local params = import '../Constants/Keyboard.libsonnet';
+local numeric9Buttons = import '../Buttons/LayoutNumeric9.libsonnet';
+local commonButtons = import '../Buttons/Common.libsonnet';
 local fonts = import '../Constants/Fonts.libsonnet';
 local basicStyle = import 'BasicStyle.libsonnet';
 local preedit = import 'Preedit.libsonnet';
@@ -56,8 +57,8 @@ local numericKeyboardLayout = {
       VStack: {
         style: narrowVStackStyle.name,
         subviews: [
-          { Cell: params.keyboard.numericSymbolsCollection.name, },
-          { Cell: params.keyboard.gotoPrimaryKeyboardButton.name, },
+          { Cell: numeric9Buttons.numericSymbolsCollection.name, },
+          { Cell: commonButtons.gotoPrimaryKeyboardButton.name, },
         ],
       },
     },
@@ -65,10 +66,10 @@ local numericKeyboardLayout = {
       VStack: {
         style: wideVStackStyle.name,
         subviews: [
-          { Cell: params.keyboard.oneButton.name, },
-          { Cell: params.keyboard.fourButton.name, },
-          { Cell: params.keyboard.sevenButton.name, },
-          { Cell: params.keyboard.numericSpaceButton.name, },
+          { Cell: numeric9Buttons.oneButton.name, },
+          { Cell: numeric9Buttons.fourButton.name, },
+          { Cell: numeric9Buttons.sevenButton.name, },
+          { Cell: numeric9Buttons.numericSpaceButton.name, },
         ],
       },
     },
@@ -76,10 +77,10 @@ local numericKeyboardLayout = {
       VStack: {
         style: wideVStackStyle.name,
         subviews: [
-          { Cell: params.keyboard.twoButton.name, },
-          { Cell: params.keyboard.fiveButton.name, },
-          { Cell: params.keyboard.eightButton.name, },
-          { Cell: params.keyboard.zeroButton.name, },
+          { Cell: numeric9Buttons.twoButton.name, },
+          { Cell: numeric9Buttons.fiveButton.name, },
+          { Cell: numeric9Buttons.eightButton.name, },
+          { Cell: numeric9Buttons.zeroButton.name, },
         ],
       },
     },
@@ -87,10 +88,10 @@ local numericKeyboardLayout = {
       VStack: {
         style: wideVStackStyle.name,
         subviews: [
-          { Cell: params.keyboard.threeButton.name, },
-          { Cell: params.keyboard.sixButton.name, },
-          { Cell: params.keyboard.nineButton.name, },
-          { Cell: params.keyboard.dotButton.name, },
+          { Cell: numeric9Buttons.threeButton.name, },
+          { Cell: numeric9Buttons.sixButton.name, },
+          { Cell: numeric9Buttons.nineButton.name, },
+          { Cell: numeric9Buttons.dotButton.name, },
         ],
       },
     },
@@ -98,10 +99,10 @@ local numericKeyboardLayout = {
       VStack: {
         style: narrowVStackStyle.name,
         subviews: [
-          { Cell: params.keyboard.backspaceButton.name, },
-          { Cell: params.keyboard.numericEqualButton.name, },
-          { Cell: params.keyboard.numericColonButton.name, },
-          { Cell: params.keyboard.enterButton.name, },
+          { Cell: commonButtons.backspaceButton.name, },
+          { Cell: numeric9Buttons.numericEqualButton.name, },
+          { Cell: numeric9Buttons.numericColonButton.name, },
+          { Cell: commonButtons.enterButton.name, },
         ],
       },
     },
@@ -130,7 +131,7 @@ local totalKeyboardLayout(isPortrait=false) =
         VStack: {
           style: halfVStackStyle.name,
           subviews: [
-            { Cell: params.keyboard.numericCategorySymbolCollection.name, },
+            { Cell: numeric9Buttons.numericCategorySymbolCollection.name, },
           ],
         }
       },
@@ -140,7 +141,7 @@ local totalKeyboardLayout(isPortrait=false) =
 
 local newKeyLayout(isDark=false, isPortrait=false, extraParams={}) =
 
-  local keyboardHeight = if isPortrait then params.keyboard.height.iPhone.portrait else params.keyboard.height.iPhone.landscape;
+  local keyboardHeight = if isPortrait then numeric9Buttons.height.iPhone.portrait else numeric9Buttons.height.iPhone.landscape;
 
   {
     keyboardHeight: keyboardHeight,
@@ -158,18 +159,18 @@ local newKeyLayout(isDark=false, isPortrait=false, extraParams={}) =
         },
         needHint=false,
       ),
-    params.keyboard.numericButtons,
+    numeric9Buttons.numericButtons,
     {})
 
   + basicStyle.newSymbolicCollection(
-    params.keyboard.numericSymbolsCollection.name,
+    numeric9Buttons.numericSymbolsCollection.name,
     isDark,
-    params.keyboard.numericSymbolsCollection.params + extraParams
+    numeric9Buttons.numericSymbolsCollection.params + extraParams
   )
   + {
-    [params.keyboard.numericCategorySymbolCollection.name]:
+    [numeric9Buttons.numericCategorySymbolCollection.name]:
       utils.newBackgroundStyle(style=basicStyle.systemButtonBackgroundStyleName)
-      + params.keyboard.numericCategorySymbolCollection.params
+      + numeric9Buttons.numericCategorySymbolCollection.params
       + extraParams,
   }
   + std.foldl(
@@ -180,17 +181,17 @@ local newKeyLayout(isDark=false, isPortrait=false, extraParams={}) =
         button.params
       ),
     [
-      params.keyboard.numericSpaceButton,
-      params.keyboard.dotButton,
-      params.keyboard.backspaceButton,
-      params.keyboard.numericEqualButton,
-      params.keyboard.numericColonButton,
-      params.keyboard.enterButton,
+      numeric9Buttons.numericSpaceButton,
+      numeric9Buttons.dotButton,
+      commonButtons.backspaceButton,
+      numeric9Buttons.numericEqualButton,
+      numeric9Buttons.numericColonButton,
+      commonButtons.enterButton,
     ],
     basicStyle.newColorButton(
-        params.keyboard.gotoPrimaryKeyboardButton.name,
+        commonButtons.gotoPrimaryKeyboardButton.name,
         isDark,
-        params.keyboard.gotoPrimaryKeyboardButton.params + {
+        commonButtons.gotoPrimaryKeyboardButton.params + {
           size: { height: '1/4' },
         }
       ));

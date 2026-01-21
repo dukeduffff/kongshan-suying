@@ -1,4 +1,6 @@
-local params = import '../Constants/Keyboard.libsonnet';
+local buttons = import '../Buttons/Layout26.libsonnet';
+local commonButtons = import '../Buttons/Common.libsonnet';
+local toolbarParams = import '../Buttons/Toolbar.libsonnet';
 local settings = import '../Settings.libsonnet';
 local basicStyle = import 'BasicStyle.libsonnet';
 local preedit = import 'Preedit.libsonnet';
@@ -11,7 +13,7 @@ local portraitNormalButtonSize = {
 
 local hintStyle = {
   hintStyle: {
-    size: { width: self.height, height: params.toolbar.height },
+    size: { width: self.height, height: toolbarParams.toolbar.height },
   },
 };
 
@@ -24,66 +26,66 @@ local alphabeticTextCenterWhenShowSwipeText =
 // 标准26键布局
 local rows = [
   [
-    params.keyboard.qButton,
-    params.keyboard.wButton,
-    params.keyboard.eButton,
-    params.keyboard.rButton,
-    params.keyboard.tButton,
-    params.keyboard.yButton,
-    params.keyboard.uButton,
-    params.keyboard.iButton,
-    params.keyboard.oButton,
-    params.keyboard.pButton,
+    buttons.qButton,
+    buttons.wButton,
+    buttons.eButton,
+    buttons.rButton,
+    buttons.tButton,
+    buttons.yButton,
+    buttons.uButton,
+    buttons.iButton,
+    buttons.oButton,
+    buttons.pButton,
   ],
   [
-    params.keyboard.aButton,
-    params.keyboard.sButton,
-    params.keyboard.dButton,
-    params.keyboard.fButton,
-    params.keyboard.gButton,
-    params.keyboard.hButton,
-    params.keyboard.jButton,
-    params.keyboard.kButton,
-    params.keyboard.lButton,
+    buttons.aButton,
+    buttons.sButton,
+    buttons.dButton,
+    buttons.fButton,
+    buttons.gButton,
+    buttons.hButton,
+    buttons.jButton,
+    buttons.kButton,
+    buttons.lButton,
   ],
   [
-    params.keyboard.shiftButton,
-    params.keyboard.zButton,
-    params.keyboard.xButton,
-    params.keyboard.cButton,
-    params.keyboard.vButton,
-    params.keyboard.bButton,
-    params.keyboard.nButton,
-    params.keyboard.mButton,
-    params.keyboard.backspaceButton,
+    commonButtons.shiftButton,
+    buttons.zButton,
+    buttons.xButton,
+    buttons.cButton,
+    buttons.vButton,
+    buttons.bButton,
+    buttons.nButton,
+    buttons.mButton,
+    commonButtons.backspaceButton,
   ],
   [
-    params.keyboard.numericButton,
+    commonButtons.numericButton,
   ]
   + (
     if settings.showFunctionButton then
-      [params.keyboard.functionButton]
+      [commonButtons.functionButton]
     else
       []
   )
   +
   [
-    params.keyboard.commaButton,
-    params.keyboard.spaceButton,
-    params.keyboard.asciiModeButton,
-    params.keyboard.enterButton,
+    commonButtons.commaButton,
+    commonButtons.spaceButton,
+    commonButtons.asciiModeButton,
+    commonButtons.enterButton,
   ],
 ];
 
 local getAlphabeticButtonSize(name) =
   local extra = {
-    [params.keyboard.aButton.name]: {
+    [buttons.aButton.name]: {
       size:
         { width: '168.75/1125' },
       bounds:
         { width: '111/168.75', alignment: 'right' },
     },
-    [params.keyboard.lButton.name]: {
+    [buttons.lButton.name]: {
       size:
         { width: '168.75/1125' },
       bounds:
@@ -99,7 +101,7 @@ local getAlphabeticButtonSize(name) =
 
 
 local newKeyLayout(isDark=false, isPortrait=true) =
-  local keyboardHeight = if isPortrait then params.keyboard.height.iPhone.portrait else params.keyboard.height.iPhone.landscape;
+  local keyboardHeight = if isPortrait then buttons.height.iPhone.portrait else buttons.height.iPhone.landscape;
   {
     keyboardHeight: keyboardHeight,
     keyboardStyle: utils.newBackgroundStyle(style=basicStyle.keyboardBackgroundStyleName),
@@ -123,12 +125,12 @@ local newKeyLayout(isDark=false, isPortrait=true) =
         )
         ,
         swipeTextFollowSetting=true),
-      params.keyboard.letterButtons,
+      buttons.letterButtons,
       {})
 
   // Third Row
   + basicStyle.newSystemButton(
-    params.keyboard.shiftButton.name,
+    commonButtons.shiftButton.name,
     isDark,
     (
       if settings.usePCLayout then portraitNormalButtonSize else
@@ -139,11 +141,11 @@ local newKeyLayout(isDark=false, isPortrait=true) =
           { width: '151/168.75', alignment: 'left' },
       }
     )
-    + params.keyboard.shiftButton.params
+    + commonButtons.shiftButton.params
   )
 
   + basicStyle.newSystemButton(
-    params.keyboard.backspaceButton.name,
+    commonButtons.backspaceButton.name,
     isDark,
     (
       if settings.usePCLayout then
@@ -158,12 +160,12 @@ local newKeyLayout(isDark=false, isPortrait=true) =
           { width: '151/168.75', alignment: 'right' },
       }
     )
-    + params.keyboard.backspaceButton.params,
+    + commonButtons.backspaceButton.params,
   )
 
   // Fourth Row
   + basicStyle.newSystemButton(
-    params.keyboard.numericButton.name,
+    commonButtons.numericButton.name,
     isDark,
     (
       if settings.showFunctionButton then
@@ -171,52 +173,52 @@ local newKeyLayout(isDark=false, isPortrait=true) =
       else
         { size: { width: '225/1125' } }
     )
-    + params.keyboard.numericButton.params
+    + commonButtons.numericButton.params
   )
 
   + basicStyle.newAlphabeticButton(
-    params.keyboard.commaButton.name,
+    commonButtons.commaButton.name,
     isDark,
-    portraitNormalButtonSize + params.keyboard.commaButton.params + hintStyle
+    portraitNormalButtonSize + commonButtons.commaButton.params + hintStyle
   )
   + (
     if settings.showFunctionButton then
       basicStyle.newAlphabeticButton(
-        params.keyboard.functionButton.name,
+        commonButtons.functionButton.name,
         isDark,
-        portraitNormalButtonSize + params.keyboard.functionButton.params + hintStyle
+        portraitNormalButtonSize + commonButtons.functionButton.params + hintStyle
       )
     else
       {}
   )
   + basicStyle.newAlphabeticButton(
-    params.keyboard.spaceButton.name,
+    commonButtons.spaceButton.name,
     isDark,
     {
       foregroundStyleName: basicStyle.spaceButtonForegroundStyle,
       foregroundStyle: basicStyle.newSpaceButtonRimeSchemaForegroundStyle(isDark),
     }
-    + params.keyboard.spaceButton.params,
+    + commonButtons.spaceButton.params,
     needHint=false,
   )
   + basicStyle.newSystemButton(
-    params.keyboard.asciiModeButton.name,
+    commonButtons.asciiModeButton.name,
     isDark,
     portraitNormalButtonSize
-    + params.keyboard.asciiModeButton.params
+    + commonButtons.asciiModeButton.params
   )
   + basicStyle.newColorButton(
-    params.keyboard.enterButton.name,
+    commonButtons.enterButton.name,
     isDark,
     {
       size: { width: '250/1125' },
-    } + params.keyboard.enterButton.params
+    } + commonButtons.enterButton.params
   )
 ;
 
 {
   new(isDark, isPortrait):
-    local insets = if isPortrait then params.keyboard.button.backgroundInsets.iPhone.portrait else params.keyboard.button.backgroundInsets.iPhone.landscape;
+    local insets = if isPortrait then buttons.button.backgroundInsets.iPhone.portrait else buttons.button.backgroundInsets.iPhone.landscape;
 
     local extraParams = {
       insets: insets,

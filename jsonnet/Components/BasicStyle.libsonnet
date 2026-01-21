@@ -1,6 +1,6 @@
 local colors = import '../Constants/Colors.libsonnet';
 local fonts = import '../Constants/Fonts.libsonnet';
-local keyboardParams = import '../Constants/Keyboard.libsonnet';
+local toolbarParams = import '../Buttons/Toolbar.libsonnet';
 local settings = import '../Settings.libsonnet';
 local utils = import 'Utils.libsonnet';
 
@@ -42,7 +42,7 @@ local newKeyboardBackgroundStyle(isDark=false, params={}) = {
 local floatingKeyboardButtonBackgroundStyleName = 'floatingKeyboardButtonBackgroundStyle';
 local newFloatingKeyboardButtonBackgroundStyle(isDark=false, params={}) = {
   [floatingKeyboardButtonBackgroundStyleName]: utils.newGeometryStyle({
-    insets: keyboardParams.floatingKeyboard.button.backgroundInsets.iPhone.portrait,
+    insets: toolbarParams.floatingKeyboard.button.backgroundInsets.iPhone.portrait,
     normalColor: colors.standardButtonBackgroundColor,
     highlightColor: colors.standardButtonHighlightedBackgroundColor,
     cornerRadius: buttonCornerRadius,
@@ -65,9 +65,10 @@ local newButtonAnimation() = {
 
 // 字母键按钮背景样式
 local alphabeticButtonBackgroundStyleName = 'alphabeticButtonBackgroundStyle';
-local newAlphabeticButtonBackgroundStyle(isDark=false, params={}) = {
+local newAlphabeticButtonBackgroundStyle(isDark=false, params={}) =
+  assert std.objectHas(params, 'insets') : '必须提供 insets 参数';
+{
   [alphabeticButtonBackgroundStyleName]: utils.newGeometryStyle({
-    insets: keyboardParams.keyboard.button.backgroundInsets.iPhone.portrait,
     normalColor: colors.standardButtonBackgroundColor,
     highlightColor: colors.standardButtonHighlightedBackgroundColor,
     cornerRadius: buttonCornerRadius,
@@ -202,9 +203,10 @@ local newLongPressSymbolsSelectedBackgroundStyle(isDark=false, params={}) = {
 
 // 系统功能键按钮背景样式
 local systemButtonBackgroundStyleName = 'systemButtonBackgroundStyle';
-local newSystemButtonBackgroundStyle(isDark=false, params={}) = {
+local newSystemButtonBackgroundStyle(isDark=false, params={}) =
+  assert std.objectHas(params, 'insets') : '必须提供 insets 参数';
+{
   [systemButtonBackgroundStyleName]: utils.newGeometryStyle({
-    insets: keyboardParams.keyboard.button.backgroundInsets.iPhone.portrait,
     normalColor: colors.systemButtonBackgroundColor,
     highlightColor: colors.systemButtonHighlightedBackgroundColor,
     cornerRadius: buttonCornerRadius,
@@ -274,9 +276,10 @@ local spaceButtonForegroundStyle = [
 
 // 彩色功能键按钮背景样式
 local colorButtonBackgroundStyleName = 'colorButtonBackgroundStyle';
-local newColorButtonBackgroundStyle(isDark=false, params={}) = {
+local newColorButtonBackgroundStyle(isDark=false, params={}) =
+  assert std.objectHas(params, 'insets') : '必须提供 insets 参数';
+{
   [colorButtonBackgroundStyleName]: utils.newGeometryStyle({
-    insets: keyboardParams.keyboard.button.backgroundInsets.iPhone.portrait,
     normalColor: colors.colorButtonBackgroundColor,
     highlightColor: colors.colorButtonHighlightedBackgroundColor,
     cornerRadius: buttonCornerRadius,
@@ -577,7 +580,7 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
                 findIndex(arr, idx + 1);
             findIndex(longPressParams, 0);
            {
-            size: { width: self.height, height: keyboardParams.toolbar.height },
+            size: { width: self.height, height: toolbarParams.toolbar.height },
             insets: {
               left: 3,
               right: 3,

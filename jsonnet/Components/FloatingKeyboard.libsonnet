@@ -1,4 +1,4 @@
-local params = import '../Constants/Keyboard.libsonnet';
+local toolbarParams = import '../Buttons/Toolbar.libsonnet';
 local basicStyle = import 'BasicStyle.libsonnet';
 local utils = import 'Utils.libsonnet';
 
@@ -16,26 +16,26 @@ local floatingKeyboardButtonsDefine = {
 
   panel: [
     [
-      params.toolbarButton.toolbarHamster3Button,
-      params.toolbarButton.toolbarKeyboardDefinition,
-      params.toolbarButton.toolbarFeedbackButton,
-      params.toolbarButton.toolbarCheckUpdateButton,
+      toolbarParams.toolbarButton.toolbarHamster3Button,
+      toolbarParams.toolbarButton.toolbarKeyboardDefinition,
+      toolbarParams.toolbarButton.toolbarFeedbackButton,
+      toolbarParams.toolbarButton.toolbarCheckUpdateButton,
     ],
     [
-      params.toolbarButton.toolbarSkinButton,
-      params.toolbarButton.toolbarSkinPreference,
-      params.toolbarButton.toolbarRimeSyncButton,
-      params.toolbarButton.toolbarToggleEmbeddedButton,
+      toolbarParams.toolbarButton.toolbarSkinButton,
+      toolbarParams.toolbarButton.toolbarSkinPreference,
+      toolbarParams.toolbarButton.toolbarRimeSyncButton,
+      toolbarParams.toolbarButton.toolbarToggleEmbeddedButton,
     ],
   ],
 };
 
 local newKeyLayout(buttonsInRow, isDark=false, isPortrait=false) =
-  local floatTargetScale = if isPortrait then params.floatingKeyboard.floatTargetScale.portrait else params.floatingKeyboard.floatTargetScale.landscape;
+  local floatTargetScale = if isPortrait then toolbarParams.floatingKeyboard.floatTargetScale.portrait else toolbarParams.floatingKeyboard.floatTargetScale.landscape;
   {
     floatTargetScale: floatTargetScale,
     keyboardStyle: {
-        insets: params.floatingKeyboard.insets,
+        insets: toolbarParams.floatingKeyboard.insets,
       }
       + utils.newBackgroundStyle(style=basicStyle.keyboardBackgroundStyleName),
   }
