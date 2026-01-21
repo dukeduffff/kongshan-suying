@@ -59,7 +59,7 @@
   # 将上述代号填入下面的数组即可
   toolbarSlideButtons: [ 8, 17, 1, 2, 3, 10, 12 ],
 
-  # 滑动按钮区域显示几个按键
+  # 滑动按钮区域占几个按键宽度
   toolbarSlideButtonsMaxCount: {
     portrait: 5,   # 竖屏
     landscape: 8,  # 横屏
