@@ -137,6 +137,23 @@ local settings = import '../Settings.libsonnet';
     },
   },
 
+  alphabeticButton: {
+    name: 'alphabeticButton',
+    params: {
+      action: { keyboardType: 'alphabetic' },
+      assetImageName: 'chineseState2',
+      swipeUp: { action: { shortcut: '#方案切换' } },
+    },
+  },
+
+  pinyinButton: {
+    name: 'pinyinButton',
+    params: {
+      action: { keyboardType: 'pinyin' },
+      assetImageName: 'englishState2',
+    },
+  },
+
   asciiModeButton: {
     name: 'asciiModeButton',
     params: {
@@ -161,7 +178,7 @@ local settings = import '../Settings.libsonnet';
         center: { y: 0.3 }
       },
 
-      whenAsciiModeOn: {
+      whenAlphabetic: {
         text: ',', center: { y: 0.48 },
         swipeUp: { text: '.', center: { y: 0.28 } },
       }
@@ -183,14 +200,6 @@ local settings = import '../Settings.libsonnet';
     params: {
       action: { keyboardType: 'symbolic' },
       text: '#+=',
-    },
-  },
-
-  pinyinButton: {
-    name: 'pinyinButton',
-    params: {
-      action: { keyboardType: 'pinyin' },
-      text: '拼音',
     },
   },
 

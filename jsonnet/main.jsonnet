@@ -1,5 +1,6 @@
-local iPhoneNumeric = import 'Components/iPhoneNumeric.libsonnet';
 local iPhonePinyin = import 'Components/iPhonePinyin.libsonnet';
+local iPhoneAlphabetic = import 'Components/iPhoneAlphabetic.libsonnet';
+local iPhoneNumeric = import 'Components/iPhoneNumeric.libsonnet';
 local floatingKeyboard = import 'Components/FloatingKeyboard.libsonnet';
 
 local pinyinPortraitFileName = 'pinyinPortrait';
@@ -9,6 +10,14 @@ local darkPinyinPortraitFileContent = iPhonePinyin.new(isDark=true, isPortrait=t
 local pinyinLandscapeFileName = 'pinyinLandscape';
 local lightPinyinLandscapeFileContent = iPhonePinyin.new(isDark=false, isPortrait=false);
 local darkPinyinLandscapeFileContent = iPhonePinyin.new(isDark=true, isPortrait=false);
+
+local alphabeticPortraitFileName = 'alphabeticPortrait';
+local lightAlphabeticPortraitFileContent = iPhoneAlphabetic.new(isDark=false, isPortrait=true);
+local darkAlphabeticPortraitFileContent = iPhoneAlphabetic.new(isDark=true, isPortrait=true);
+
+local alphabeticLandscapeFileName = 'alphabeticLandscape';
+local lightAlphabeticLandscapeFileContent = iPhoneAlphabetic.new(isDark=false, isPortrait=false);
+local darkAlphabeticLandscapeFileContent = iPhoneAlphabetic.new(isDark=true, isPortrait=false);
 
 local numericPortraitFileName = 'numericPortrait';
 local lightNumericPortraitFileContent = iPhoneNumeric.new(isDark=false, isPortrait=true);
@@ -36,6 +45,17 @@ local config = {
       portrait: pinyinPortraitFileName,
       landscape: pinyinLandscapeFileName,
       floating: pinyinPortraitFileName,
+    },
+  },
+  alphabetic: {
+    iPhone: {
+      portrait: alphabeticPortraitFileName,
+      landscape: alphabeticLandscapeFileName,
+    },
+    iPad: {
+      portrait: alphabeticPortraitFileName,
+      landscape: alphabeticLandscapeFileName,
+      floating: alphabeticPortraitFileName,
     },
   },
   numeric: {
@@ -85,6 +105,12 @@ function(debug=false)
   ['dark/' + pinyinPortraitFileName + '.yaml']: toString(darkPinyinPortraitFileContent),
   ['light/' + pinyinLandscapeFileName + '.yaml']: toString(lightPinyinLandscapeFileContent),
   ['dark/' + pinyinLandscapeFileName + '.yaml']: toString(darkPinyinLandscapeFileContent),
+
+  // 英文键盘
+  ['light/' + alphabeticPortraitFileName + '.yaml']: toString(lightAlphabeticPortraitFileContent),
+  ['dark/' + alphabeticPortraitFileName + '.yaml']: toString(darkAlphabeticPortraitFileContent),
+  ['light/' + alphabeticLandscapeFileName + '.yaml']: toString(lightAlphabeticLandscapeFileContent),
+  ['dark/' + alphabeticLandscapeFileName + '.yaml']: toString(darkAlphabeticLandscapeFileContent),
 
   // 数字键盘
   ['light/' + numericPortraitFileName + '.yaml']: toString(lightNumericPortraitFileContent),
