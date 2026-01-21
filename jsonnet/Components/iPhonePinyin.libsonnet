@@ -61,15 +61,6 @@ local rows = [
   ],
   [
     commonButtons.numericButton,
-  ]
-  + (
-    if settings.showFunctionButton then
-      [commonButtons.functionButton]
-    else
-      []
-  )
-  +
-  [
     commonButtons.commaButton,
     commonButtons.spaceButton,
     commonButtons.asciiModeButton,
@@ -167,12 +158,7 @@ local newKeyLayout(isDark=false, isPortrait=true) =
   + basicStyle.newSystemButton(
     commonButtons.numericButton.name,
     isDark,
-    (
-      if settings.showFunctionButton then
-        { size: { width: '191.25/1125' } }
-      else
-        { size: { width: '225/1125' } }
-    )
+    { size: { width: '225/1125' } }
     + commonButtons.numericButton.params
   )
 
@@ -180,16 +166,6 @@ local newKeyLayout(isDark=false, isPortrait=true) =
     commonButtons.commaButton.name,
     isDark,
     portraitNormalButtonSize + commonButtons.commaButton.params + hintStyle
-  )
-  + (
-    if settings.showFunctionButton then
-      basicStyle.newAlphabeticButton(
-        commonButtons.functionButton.name,
-        isDark,
-        portraitNormalButtonSize + commonButtons.functionButton.params + hintStyle
-      )
-    else
-      {}
   )
   + basicStyle.newAlphabeticButton(
     commonButtons.spaceButton.name,

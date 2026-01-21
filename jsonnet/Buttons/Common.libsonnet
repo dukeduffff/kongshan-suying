@@ -90,7 +90,20 @@ local settings = import '../Settings.libsonnet';
 
   functionButton: {
     name: 'functionButton',
-    params: settings.functionButtonParams,
+    params: {
+      action: { shortcut: '#selectText' },
+      systemImageName: 'selection.pin.in.out',
+
+      whenKeyboardAction: [
+        {
+          notificationKeyboardAction: {
+            shortcut: '#selectText'
+          },
+          action: { shortcut: '#cut' },
+          systemImageName: 'scissors',
+        },
+      ],
+    },
   },
 
   goBackButton: {
