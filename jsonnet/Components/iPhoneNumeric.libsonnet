@@ -6,11 +6,6 @@ local preedit = import 'Preedit.libsonnet';
 local toolbar = import 'Toolbar.libsonnet';
 local utils = import 'Utils.libsonnet';
 
-local backgroundInsets = {
-  portrait: { top: 3, left: 4, bottom: 3, right: 4 },
-  landscape: { top: 3, left: 3, bottom: 3, right: 3 },
-};
-
 // 窄 VStack 宽度样式
 local narrowVStackStyle = {
   local this = self,
@@ -198,7 +193,7 @@ local newKeyLayout(isDark=false, isPortrait=false, extraParams={}) =
 
 {
   new(isDark, isPortrait):
-    local insets = if isPortrait then backgroundInsets.portrait else backgroundInsets.landscape;
+    local insets = if isPortrait then numeric9Buttons.button.backgroundInsets.iPhone.portrait else numeric9Buttons.button.backgroundInsets.iPhone.landscape;
 
     local extraParams = {
       insets: insets,
