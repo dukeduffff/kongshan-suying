@@ -81,6 +81,7 @@
 
 
   # 中文模式下，字母键是否大写显示
+  # 17键布局下此设置无效，因为它是大小写混合显示的
   # true 大写，false 小写
   uppercaseForChinese: true,
 
