@@ -137,6 +137,14 @@ local settings = import '../Settings.libsonnet';
     },
   },
 
+  segmentButton: {
+    name: 'segmentButton',
+    params: {
+      action: settings.segmentAction,
+      text: '分词',
+    },
+  },
+
   alphabeticButton: {
     name: 'alphabeticButton',
     params: {
