@@ -30,7 +30,7 @@ local settings = import '../Settings.libsonnet';
       whenPreeditChanged: {
         text: settings.spaceButtonComposingText,
         fontSize: fonts.systemButtonTextFontSize,
-      }
+      },
     },
   },
 
@@ -193,7 +193,7 @@ local settings = import '../Settings.libsonnet';
       whenAlphabetic: {
         text: ',', center: { y: 0.48 },
         swipeUp: { text: '.', center: { y: 0.28 } },
-      }
+      },
     },
   },
 
