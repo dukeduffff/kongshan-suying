@@ -105,34 +105,33 @@ local settings = import '../Settings.libsonnet';
     },
   },
 
-  local numericSymbolAction(char) =
-    if settings.numericSymbolsUseRime then
-      {
-        action: { character: char },
-        swipeUp: { action: { symbol: char } }
-      }
-    else
-      {
-        action: { symbol: char },
-        swipeUp: { action: { character: char } }
-      },
-
   // 数字键盘等号
   numericEqualButton: {
     name: 'numericEqualButton',
-    params: numericSymbolAction('='),
+    params: {
+      // 在我的方案中，这个符号是计算器前缀符号，所以用 character 而不是 symbol
+      action: { character: '=' },
+    },
   },
 
   // 数字键盘冒号
   numericColonButton: {
     name: 'numericColonButton',
-    params: numericSymbolAction(':'),
+    params: {
+      action: { symbol: ':' },
+    },
   },
 
   // 数字键小数点符号
   dotButton: {
     name: 'dotButton',
-    params: numericSymbolAction('.'),
+    params: {
+      action: { symbol: '.' },
+
+      // 使用方案中的计算器时，通常会有一个计算器前缀（或算式）在 preedit 中，
+      // 此时就把小数点交给 rime 处理
+      whenPreeditChanged: { action: { character: '.' } }
+    },
   },
 
   // 数字键盘符号列表

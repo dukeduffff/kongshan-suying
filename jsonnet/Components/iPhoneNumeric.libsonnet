@@ -154,11 +154,16 @@ local newKeyLayout(isDark=false, isPortrait=false, extraParams={}) =
         {
           fontSize: fonts.numericButtonTextFontSize,
         }
+        + button.params
         + (
           if settings.keyboardLayout=='9' then
-            utils.repalceCharacterToSymbolRecursive(button.params)
-          else
-            button.params
+          {
+            action: utils.repalceCharacterToSymbolRecursive(button.params.action),
+            whenPreeditChanged: {
+              action: button.params.action,
+            },
+          }
+          else {}
         ),
         needHint=false,
       ),
