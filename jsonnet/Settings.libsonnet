@@ -15,6 +15,12 @@
   keyboardLayout: '26',
 
 
+  # 数字键盘布局选择，可选值如下：
+  # 9 : 九宫格布局
+  # row : 数字显示在一行
+  numericLayout: '9',
+
+
   # 输入时空格键上的内容，支持固定内容和变量
   # 变量可选如下：
   # $rimePreedit：Rime 预编辑文本

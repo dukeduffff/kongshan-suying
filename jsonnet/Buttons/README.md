@@ -4,16 +4,16 @@
 本文件是对键盘按键功能进行自定义修改的说明。
 
 键盘按键功能设置位于 `jsonnet/Buttons/` 文件夹下。
-各文件及包含的按键描述如下：
+各文件及包含的按键对应如下：
 - README.md：本说明文件。
-- Layout26：26 键中文和英文键盘。
-- LayoutNumeric9：9键形式数字键盘。
+- Common：一些通用按键功能，例如shift, space, enter 等。
 - Layout9: 九宫格键盘。
 - Layout14: 14键布局。
 - Layout17：17键布局。
 - Layout18：18键布局。
-- Toolbar：工具栏和浮动面板中的按键功能。
-- Common：一些通用按键功能，例如shift, space, enter 等。
+- Layout26：26 键中文和英文键盘。
+- LayoutNumeric：数字键盘。
+- Toolbar：工具栏和浮动面板中的按键。
 
 按键的具体配置语法可以参考后面的「按键语法说明」部分。
 

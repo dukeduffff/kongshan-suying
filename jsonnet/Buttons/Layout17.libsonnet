@@ -14,19 +14,6 @@ local settings = import '../Settings.libsonnet';
 {
   local root = self,
 
-  button: {
-    backgroundInsets: if !settings.iPad then
-      {
-        portrait: { top: 5, left: 3, bottom: 5, right: 3 },
-        landscape: { top: 3, left: 3, bottom: 3, right: 3 },
-      }
-      else
-      {
-        portrait: { top: 3, left: 3, bottom: 3, right: 3 },
-        landscape: { top: 4, left: 6, bottom: 4, right: 6 },
-      },
-  },
-
   // 按键定义
   hButton: {
     name: 'hButton',

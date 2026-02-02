@@ -15,19 +15,6 @@ local commonButtons = import './Common.libsonnet';
 {
   local root = self,
 
-  button: {
-    backgroundInsets: if !settings.iPad then
-      {
-        portrait: { top: 3, left: 4, bottom: 3, right: 4 },
-        landscape: { top: 3, left: 3, bottom: 3, right: 3 },
-      }
-      else
-      {
-        portrait: { top: 3, left: 3, bottom: 3, right: 3 },
-        landscape: { top: 4, left: 6, bottom: 4, right: 6 },
-      },
-  },
-
   // T9 按键
   t9OneButton: {
     name: 't9OneButton',
