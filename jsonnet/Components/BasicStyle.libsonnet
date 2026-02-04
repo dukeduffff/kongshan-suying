@@ -34,11 +34,11 @@ local getKeyboardActionText(params={}, key='action', isUppercase=false) =
 local newStyleByPriority(isDark=false, params={}, highPriorityParams={}, systemImageParams={}, assetImageParams={}, textParams={}) =
   local tryAddTextInHighPriorityParams = getKeyboardActionText(highPriorityParams);
   if std.objectHas(highPriorityParams, 'systemImageName') then
-    utils.newSystemImageStyle(systemImageParams + highPriorityParams + params, isDark)
+    utils.newSystemImageStyle(systemImageParams + params + highPriorityParams, isDark)
   else if std.objectHas(highPriorityParams, 'assetImageName') then
-    utils.newAssetImageStyle(assetImageParams + highPriorityParams + params, isDark)
+    utils.newAssetImageStyle(assetImageParams + params + highPriorityParams, isDark)
   else if std.objectHas(tryAddTextInHighPriorityParams, 'text') then
-    utils.newTextStyle(textParams + highPriorityParams + params + tryAddTextInHighPriorityParams, isDark)
+    utils.newTextStyle(textParams + params + highPriorityParams + tryAddTextInHighPriorityParams, isDark)
 
   else if std.objectHas(params, 'systemImageName') then
     utils.newSystemImageStyle(systemImageParams + params, isDark)
