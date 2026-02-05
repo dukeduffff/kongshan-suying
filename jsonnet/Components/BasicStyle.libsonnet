@@ -896,6 +896,16 @@ local rimeSchemaChangedNotification =
     },
   };
 
+local returnKeyTypeChangedNotification =
+  {
+    returnKeyTypeChangedNotification:{
+      notificationType: 'returnKeyType',
+      returnKeyType: [],
+      backgroundStyle: colorButtonBackgroundStyleName,
+      foregroundStyle: colorButtonForegroundStyleName,
+    },
+  };
+
 
 {
   getKeyboardActionText: getKeyboardActionText,
@@ -946,4 +956,5 @@ local rimeSchemaChangedNotification =
 
   // notification
   rimeSchemaChangedNotification: rimeSchemaChangedNotification,
+  returnKeyTypeChangedNotification: returnKeyTypeChangedNotification,
 }
