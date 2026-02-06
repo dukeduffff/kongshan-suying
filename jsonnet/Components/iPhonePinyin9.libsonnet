@@ -182,17 +182,14 @@ local newKeyLayout(isDark=false, isPortrait=false, extraParams={}) =
 
   + totalKeyboardLayout(isPortrait)
 
-  + basicStyle.newSymbolicCollection(
-    pinyin9Buttons.t9SymbolsCollection.name,
-    isDark,
-    pinyin9Buttons.t9SymbolsCollection.params + extraParams
-  )
-
   + {
-    [pinyin9Buttons.t9CandidatesCollection.name]:
+    [pinyin9Buttons.t9SymbolsCollection.name]:
       utils.newBackgroundStyle(style=basicStyle.systemButtonBackgroundStyleName)
-      + pinyin9Buttons.t9CandidatesCollection.params
-      + extraParams,
+      + pinyin9Buttons.t9SymbolsCollection.params + extraParams,
+
+    [if !isPortrait then pinyin9Buttons.t9CandidatesCollection.name]:
+      utils.newBackgroundStyle(style=basicStyle.systemButtonBackgroundStyleName)
+      + pinyin9Buttons.t9CandidatesCollection.params + extraParams,
   }
 
   // t9 Buttons
