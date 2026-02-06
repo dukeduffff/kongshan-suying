@@ -42,6 +42,8 @@ local settings = import '../Settings.libsonnet';
       whenPreeditChanged: {
         text: settings.spaceButtonComposingText,
         fontSize: fonts.systemButtonTextFontSize,
+
+        swipeUp: { action: { shortcut: '#次选上屏' } },
       },
     },
   },
