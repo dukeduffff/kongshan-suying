@@ -53,4 +53,6 @@ PC 端编译时需要安装 `jsonnet` 等命令行工具。
 
 ```shell
 jsonnet -S -m . --tla-code debug=true ./jsonnet/main.jsonnet
+
+zip -r kongshan_suying_v8.3.cskin . -x "*.git*" "node_modules/*" "*.DS_Store" ".idea/*" ".vscode/*"
 ```
