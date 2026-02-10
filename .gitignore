@@ -10,3 +10,4 @@ dark/.*.keyboard
 .idea/
 .git/
 ./build
+.DS_Store
