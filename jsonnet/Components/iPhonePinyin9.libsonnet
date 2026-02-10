@@ -103,9 +103,9 @@ local t9KeyboardLayout = {
           {
             HStack: {
               subviews: [
-                { Cell: pinyin9Buttons.cursorRightButton.name, },
                 { Cell: commonButtons.symbolicButton.name, },
                 { Cell: pinyin9Buttons.spaceButton.name, },
+                { Cell: commonButtons.alphabeticButton.name, },
               ],
             },
           },
@@ -223,9 +223,9 @@ local newKeyLayout(isDark=false, isPortrait=false, extraParams={}) =
   )
 
   + basicStyle.newSystemButton(
-    pinyin9Buttons.cursorRightButton.name,
+    commonButtons.symbolicButton.name,
     isDark,
-    pinyin9Buttons.cursorRightButton.params +
+    commonButtons.symbolicButton.params +
     {
       size: { width: { percentage: 0.2 } },
     },

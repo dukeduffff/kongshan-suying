@@ -71,7 +71,7 @@
   # 26-左移  27-右移
   #
   # 将上述代号填入下面的数组即可
-  toolbarSlideButtons: [ 8, 17, 20, 2, 3, 10 ],
+  toolbarSlideButtons: [ 17, 1, 2, 3, 10 ],
 
   # 滑动按钮区域占几个按键宽度
   toolbarSlideButtonsMaxCount: {
