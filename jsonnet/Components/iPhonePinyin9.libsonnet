@@ -104,8 +104,8 @@ local t9KeyboardLayout = {
             HStack: {
               subviews: [
                 { Cell: pinyin9Buttons.cursorRightButton.name, },
+                { Cell: commonButtons.symbolicButton.name, },
                 { Cell: pinyin9Buttons.spaceButton.name, },
-                { Cell: commonButtons.alphabeticButton.name, },
               ],
             },
           },

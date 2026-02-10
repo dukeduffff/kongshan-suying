@@ -12,7 +12,7 @@
   # 14 : 14键布局（双键布局）
   # 17 : 17键布局
   # 18 : 18键布局
-  keyboardLayout: '26',
+  keyboardLayout: '9',
 
 
   # 数字键盘布局选择，可选值如下：
@@ -71,7 +71,7 @@
   # 26-左移  27-右移
   #
   # 将上述代号填入下面的数组即可
-  toolbarSlideButtons: [ 8, 17, 1, 2, 3, 10, 12 ],
+  toolbarSlideButtons: [ 8, 17, 20, 2, 3, 10 ],
 
   # 滑动按钮区域占几个按键宽度
   toolbarSlideButtonsMaxCount: {
@@ -93,7 +93,7 @@
   # 中文模式下，字母键是否大写显示
   # 17键布局下此设置无效，因为它是大小写混合显示的
   # true 大写，false 小写
-  uppercaseForChinese: true,
+  uppercaseForChinese: false,
 
 
   # 分词键，用于输入方案中分词使用

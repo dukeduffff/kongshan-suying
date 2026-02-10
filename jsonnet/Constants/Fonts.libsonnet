@@ -11,8 +11,8 @@
 
   t9ButtonTextFontSize: 18,
 
-  standardButtonTextFontSize: 22.5,
-  standardButtonUppercasedTextFontSize: 21.5,
+  standardButtonTextFontSize: 20.5,
+  standardButtonUppercasedTextFontSize: 19.5,
   standardButtonImageFontSize: 20,
 
   numericButtonTextFontSize: 22.5,

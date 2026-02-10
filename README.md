@@ -52,5 +52,5 @@ enter 上划行首，下划行尾，长按换行
 PC 端编译时需要安装 `jsonnet` 等命令行工具。
 
 ```shell
-jsonnet -S -m . --tla-code debug=true .\jsonnet\main.jsonnet
+jsonnet -S -m . --tla-code debug=true ./jsonnet/main.jsonnet
 ```
