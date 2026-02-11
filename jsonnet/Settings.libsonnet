@@ -33,6 +33,7 @@
   # true 是 iPad，false 是 iPhone
   iPad: false,
 
+
   # 是否在空格键上显示方案名称
   # true 显示方案名称，false 不显示
   spaceButtonShowSchema: true,
@@ -46,10 +47,16 @@
   },
 
 
-  # 是否显示上下滑动提示
-  # true 显示，false 不显示
-  showSwipeUpText: true,
-  showSwipeDownText: false,
+  # 上下滑动提示文字显示位置
+  # hide      🙈不显示
+  # topLeft   ↖️左上角
+  # top       ⬆️正上方
+  # topRight  ↗️右上角
+  # bottomLeft   ↙️左下角
+  # bottom       ⬇️正下方
+  # bottomRight  ↘️右下角
+  swipeUpTextCenter: 'top',
+  swipeDownTextCenter: 'hide',
 
 
   # toolbar 按钮配置

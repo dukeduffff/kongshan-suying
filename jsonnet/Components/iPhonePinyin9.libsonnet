@@ -8,16 +8,6 @@ local preedit = import 'Preedit.libsonnet';
 local toolbar = import 'Toolbar.libsonnet';
 local utils = import 'Utils.libsonnet';
 
-local alphabeticTextCenterWhenShowSwipeText =
-  local showSwipeText = settings.showSwipeUpText || settings.showSwipeDownText;
-  {
-    [if showSwipeText then 'center']: { y: 0.55 }
-  };
-
-local backgroundInsets = {
-  portrait: { top: 3, left: 4, bottom: 3, right: 4 },
-  landscape: { top: 3, left: 3, bottom: 3, right: 3 },
-};
 
 // 窄 VStack 宽度样式
 local narrowVStackStyle = {
@@ -198,7 +188,7 @@ local newKeyLayout(isDark=false, isPortrait=false, extraParams={}) =
       basicStyle.newAlphabeticButton(
         button.name,
         isDark,
-        alphabeticTextCenterWhenShowSwipeText + {
+        basicStyle.textCenterWhenShowSwipeText + {
           fontSize: fonts.t9ButtonTextFontSize,
         } + button.params + (
           if settings.uppercaseForChinese then
