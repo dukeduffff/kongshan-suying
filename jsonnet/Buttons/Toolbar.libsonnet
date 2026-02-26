@@ -10,7 +10,6 @@
 local colors = import '../Constants/Colors.libsonnet';
 local fonts = import '../Constants/Fonts.libsonnet';
 local settings = import '../Settings.libsonnet';
-local skinConfig = import '../SkinConfig.libsonnet';
 
 {
   local root = self,
@@ -161,7 +160,7 @@ local skinConfig = import '../SkinConfig.libsonnet';
     toolbarSkinPreference: {
       name: 'toolbarSkinPreference',
       params: {
-        action: { openURL: 'hamster3://com.ihsiao.apps.hamster3/finder?action=openAppFile&fileURL=Skins/'+skinConfig.name+'/jsonnet/Settings.libsonnet' },
+        action: { openURL: 'hamster3://com.ihsiao.apps.hamster3/finder?action=openSkinsFile&fileURL=jsonnet/Settings.libsonnet' },
         systemImageName: 'wrench.and.screwdriver',
         text: '微调',
       },
@@ -169,7 +168,7 @@ local skinConfig = import '../SkinConfig.libsonnet';
     toolbarKeyboardDefinition: {
       name: 'toolbarKeyboardDefinition',
       params: {
-        action: { openURL: 'hamster3://com.ihsiao.apps.hamster3/finder?action=openAppFile&fileURL=Skins/'+skinConfig.name+'/jsonnet/Buttons/README.md' },
+        action: { openURL: 'hamster3://com.ihsiao.apps.hamster3/finder?action=openSkinsFile&fileURL=jsonnet/Buttons/README.md' },
         systemImageName: 'keyboard.badge.ellipsis',
         text: '按键',
       },
