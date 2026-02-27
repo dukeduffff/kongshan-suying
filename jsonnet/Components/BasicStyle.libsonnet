@@ -175,7 +175,8 @@ local alphabeticHintBackgroundStyleName = 'alphabeticHintBackgroundStyle';
 local newAlphabeticHintBackgroundStyle(isDark=false, params={}) = {
   [alphabeticHintBackgroundStyleName]: utils.newGeometryStyle({
     normalColor: colors.standardCalloutBackgroundColor,
-    borderColor: colors.standardCalloutBorderColor,
+    normalBorderColor: colors.standardCalloutBorderColor,
+    highlightBorderColor: colors.standardCalloutBorderColor,
     borderSize: 0.5,
     shadowRadius: 3,
     normalShadowColor: colors.standardButtonShadowColor,
@@ -205,7 +206,8 @@ local newLongPressSymbolsBackgroundStyle(isDark=false, params={}) = {
     normalColor: colors.standardCalloutBackgroundColor,
     highlightColor: colors.standardCalloutSelectedBackgroundColor,
     cornerRadius: 10,
-    borderColor: colors.standardCalloutBorderColor,
+    normalBorderColor: colors.standardCalloutBorderColor,
+    highlightBorderColor: colors.standardCalloutBorderColor,
     borderSize: 0.5,
     shadowRadius: 3,
     normalShadowColor: colors.standardButtonShadowColor,
