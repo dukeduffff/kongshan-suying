@@ -31,11 +31,4 @@
   candidateIndexFontSize: 12,
   candidateTextFontSize: 16,
   candidateCommentFontSize: 14,
-
-  ipad: {
-    button: {
-      doubleLabelFontSize: 18,
-      doubleLabelSmallFontSize: 14
-    },
-  },
 }
