@@ -10,7 +10,6 @@
 local colors = import '../Constants/Colors.libsonnet';
 local fonts = import '../Constants/Fonts.libsonnet';
 local settings = import '../Settings.libsonnet';
-local skinConfig = import '../SkinConfig.libsonnet';
 
 {
   local root = self,
@@ -130,8 +129,8 @@ local skinConfig = import '../SkinConfig.libsonnet';
       name: 'toolbarHamster3Button',
       params: {
         action: 'settings',
-        systemImageName: 'gearshape',
-        text: '设置',
+        systemImageName: 'atom',
+        text: '元书',
       },
     },
     toolbarCheckUpdateButton: {
@@ -161,7 +160,7 @@ local skinConfig = import '../SkinConfig.libsonnet';
     toolbarSkinPreference: {
       name: 'toolbarSkinPreference',
       params: {
-        action: { openURL: 'hamster3://com.ihsiao.apps.hamster3/finder?action=openAppFile&fileURL=Skins/'+skinConfig.name+'/jsonnet/Settings.libsonnet' },
+        action: { openURL: 'hamster3://com.ihsiao.apps.hamster3/finder?action=openSkinsFile&fileURL=jsonnet/Settings.libsonnet' },
         systemImageName: 'wrench.and.screwdriver',
         text: '微调',
       },
@@ -169,7 +168,7 @@ local skinConfig = import '../SkinConfig.libsonnet';
     toolbarKeyboardDefinition: {
       name: 'toolbarKeyboardDefinition',
       params: {
-        action: { openURL: 'hamster3://com.ihsiao.apps.hamster3/finder?action=openAppFile&fileURL=Skins/'+skinConfig.name+'/jsonnet/Buttons/README.md' },
+        action: { openURL: 'hamster3://com.ihsiao.apps.hamster3/finder?action=openSkinsFile&fileURL=jsonnet/Buttons/README.md' },
         systemImageName: 'keyboard.badge.ellipsis',
         text: '按键',
       },
@@ -266,7 +265,8 @@ local skinConfig = import '../SkinConfig.libsonnet';
       name: 'toolbarKeyboardEmojiButton',
       params: {
         action: { keyboardType: 'emojis', },
-        systemImageName: 'face.smiling.inverse',
+		// systemImageName: 'face.smiling.inverse', // 这个表情经常会异常反色
+        systemImageName: 'face.dashed',
         text: '表情',
       },
     },
@@ -322,6 +322,7 @@ local skinConfig = import '../SkinConfig.libsonnet';
       name: 'toolbarMoveCursorLeftButton',
       params: {
         action: 'moveCursorBackward',
+        repeatAction: 'moveCursorBackward',
         systemImageName: 'arrowshape.left',
         text: '左移',
       },
@@ -330,6 +331,7 @@ local skinConfig = import '../SkinConfig.libsonnet';
       name: 'toolbarMoveCursorRightButton',
       params: {
         action: 'moveCursorForward',
+        repeatAction: 'moveCursorForward',
         systemImageName: 'arrowshape.right',
         text: '右移',
       },

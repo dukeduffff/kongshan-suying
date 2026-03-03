@@ -1,5 +1,5 @@
-# 「空山素影」皮肤特点
-- 支持多种键盘布局，包括 26 键、9键、14键、17键、18键等布局。
+## 「空山素影」皮肤特点
+- 支持多种键盘布局，包括 26 键、9键、14键、17键、18键、注音键盘等布局。
 - 数字键盘布局包括九宫格数字和全键盘数字。
 - 不包含图片资源，风格接近原生键盘。
 - 工具栏滑动按钮自定义，方便快速对工具栏进行个性化设置，且可以设置为纯文本工具栏。
@@ -52,7 +52,15 @@ enter 上划行首，下划行尾，长按换行
 PC 端编译时需要安装 `jsonnet` 等命令行工具。
 
 ```shell
+# windows
+jsonnet -S -m . --tla-code debug=true .\jsonnet\main.jsonnet
+
+# linux/macOS
 jsonnet -S -m . --tla-code debug=true ./jsonnet/main.jsonnet
 
 git archive --format=zip --prefix=空山素影/ -o kongshan_suying_v8.3.cskin
 ```
+
+## github 仓库地址
+- [空山素影](https://github.com/luozikuan/kongshan-suying)
+- [最新版本发布地址](https://github.com/luozikuan/kongshan-suying/releases/latest)

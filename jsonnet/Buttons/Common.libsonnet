@@ -15,16 +15,28 @@ local settings = import '../Settings.libsonnet';
 {
   local root = self,
 
-  // 每行高度
-  rowHeight: if !settings.iPad then
+  // 键盘高度（不含工具栏）
+  keyboardHeight: if !settings.iPad then
     {
-      portrait: 54,
-      landscape: 40,
+      portrait: 216,  // 54 * 4
+      landscape: 160,  // 40 * 4
     }
     else
     {
-      portrait: 64,
-      landscape: 86,
+      portrait: 256,  // 64 * 4
+      landscape: 344,  // 86 * 4
+    },
+
+  // 按键背景内边距
+  backgroundInsets: if !settings.iPad then
+    {
+      portrait: { top: 5, left: 3, bottom: 5, right: 3 },
+      landscape: { top: 3, left: 3, bottom: 3, right: 3 },
+    }
+    else
+    {
+      portrait: { top: 3, left: 3, bottom: 3, right: 3 },
+      landscape: { top: 4, left: 6, bottom: 4, right: 6 },
     },
 
   // 特殊功能键
@@ -76,6 +88,12 @@ local settings = import '../Settings.libsonnet';
 
       uppercased: { systemImageName: 'shift.fill', },
       capsLocked: { systemImageName: 'capslock.fill', },
+
+      whenPreeditChanged: {
+        action: settings.segmentAction,
+        // systemImageName: 'square.and.line.vertical.and.square',
+        text: '分词',
+      },
     },
   },
 
@@ -140,6 +158,14 @@ local settings = import '../Settings.libsonnet';
     },
   },
 
+  iOSNextKeyboardButton: {
+    name: 'iOSNextKeyboardButton',
+    params: {
+      action: 'nextKeyboard',
+      systemImageName: 'globe',
+    },
+  },
+
   numericButton: {
     name: 'numericButton',
     params: {
@@ -147,12 +173,20 @@ local settings = import '../Settings.libsonnet';
       text: '123',
       swipeUp: { action: { keyboardType: 'symbolic' } },
       swipeDown: { action: { keyboardType: 'emojis' } },
-
-      // whenPreeditChanged: {
-      //   action: settings.segmentAction,
-      //   text: '分词',
-      // },
-    },
+    }
+    + ( // 对于 iPad 设备，长按数字键可以切换到 iOS 系统键盘列表中的下一个键盘
+      if settings.iPad then {
+        longPress: [
+          {
+            systemImageName: 'globe',
+            action: 'nextKeyboard',
+            selected: true,
+          },
+        ],
+      }
+      else {}
+    )
+    ,
   },
 
   symbolicButton: {

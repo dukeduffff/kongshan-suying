@@ -1,5 +1,4 @@
 local fonts = import '../Constants/Fonts.libsonnet';
-local params = import '../Constants/Keyboard.libsonnet';
 local pinyin9Buttons = import '../Buttons/Layout9.libsonnet';
 local commonButtons = import '../Buttons/Common.libsonnet';
 local settings = import '../Settings.libsonnet';
@@ -164,9 +163,8 @@ local totalKeyboardLayout(isPortrait=false) =
 
 
 local newKeyLayout(isDark=false, isPortrait=false, extraParams={}) =
-  local rowHeight = if isPortrait then commonButtons.rowHeight.portrait else commonButtons.rowHeight.landscape;
   {
-    keyboardHeight: rowHeight * 4,
+    keyboardHeight: if isPortrait then commonButtons.keyboardHeight.portrait else commonButtons.keyboardHeight.landscape,
     keyboardStyle: utils.newBackgroundStyle(style=basicStyle.keyboardBackgroundStyleName),
   }
 

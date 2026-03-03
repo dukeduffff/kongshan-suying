@@ -175,7 +175,8 @@ local alphabeticHintBackgroundStyleName = 'alphabeticHintBackgroundStyle';
 local newAlphabeticHintBackgroundStyle(isDark=false, params={}) = {
   [alphabeticHintBackgroundStyleName]: utils.newGeometryStyle({
     normalColor: colors.standardCalloutBackgroundColor,
-    borderColor: colors.standardCalloutBorderColor,
+    normalBorderColor: colors.standardCalloutBorderColor,
+    highlightBorderColor: colors.standardCalloutBorderColor,
     borderSize: 0.5,
     shadowRadius: 3,
     normalShadowColor: colors.standardButtonShadowColor,
@@ -205,7 +206,8 @@ local newLongPressSymbolsBackgroundStyle(isDark=false, params={}) = {
     normalColor: colors.standardCalloutBackgroundColor,
     highlightColor: colors.standardCalloutSelectedBackgroundColor,
     cornerRadius: 10,
-    borderColor: colors.standardCalloutBorderColor,
+    normalBorderColor: colors.standardCalloutBorderColor,
+    highlightBorderColor: colors.standardCalloutBorderColor,
     borderSize: 0.5,
     shadowRadius: 3,
     normalShadowColor: colors.standardButtonShadowColor,
@@ -383,27 +385,25 @@ local newToolbarButtonForegroundStyle(isDark=false, params={}) =
 
 local toolbarSlideButtonsName = 'toolbarSlideButtons';
 local newToolbarSlideButtons(buttons, slideButtonsMaxCount, isDark=false) =
-  local rightToLeft = std.length(buttons) < slideButtonsMaxCount;
+  assert std.length(buttons) > slideButtonsMaxCount : '滑动按钮数量必须大于 slideButtonsMaxCount';
   {
     [toolbarSlideButtonsName]: {
       type: 'horizontalSymbols',
       size: { width: '%d/%d' % [slideButtonsMaxCount, slideButtonsMaxCount + 2] },
       maxColumns: slideButtonsMaxCount,
-      contentRightToLeft: rightToLeft,
-      insets: { left: 3, right: 3 },
+      contentRightToLeft: false,
       // backgroundStyle: 'toolbarcollectionCellBackgroundStyle',
       dataSource: 'horizontalSymbolsToolbarButtonsDataSource',
       // 用于定义符号列表中每个符号的样式(仅支持文本)
       cellStyle: 'toolbarCollectionCellStyle',
     },
     horizontalSymbolsToolbarButtonsDataSource:
-      local adjustOrderButtons = if rightToLeft then std.reverse(buttons) else buttons;
       [
         {
           label: button.name,
           action: button.params.action,
           styleName: button.name + 'Style',
-        } for button in adjustOrderButtons
+        } for button in buttons
       ],
     toolbarCollectionCellStyle: utils.newBackgroundStyle(style=keyboardBackgroundStyleName)
       + utils.newForegroundStyle(style=keyboardBackgroundStyleName),
@@ -437,8 +437,21 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
   reference: {},   // 按钮内的相关引用定义
   globalNames: [], // 引用全局名称列表
 
-  AddBackgroundStyle(): root {
-    [root.name]+: { backgroundStyle: type + 'ButtonBackgroundStyle' },
+  AddBackgroundStyle():
+    local hasBackgroundName = std.objectHas(root.params, 'backgroundStyleName');
+    local hasBackgroundStyle = std.objectHas(root.params, 'backgroundStyle');
+  root {
+    [root.name]+:
+      if hasBackgroundName then
+        assert std.type(root.params.backgroundStyleName) == 'string' : 'backgroundStyleName 必须是字符串，当前为' + root.params.backgroundStyleName;
+        { backgroundStyle: root.params.backgroundStyleName }
+      else
+        { backgroundStyle: root.type + 'ButtonBackgroundStyle' },
+    reference+:
+      if hasBackgroundStyle then
+        assert std.type(root.params.backgroundStyle) == 'object' : 'backgroundStyle 必须是一个对象，当前为' + root.params.backgroundStyle;
+        root.params.backgroundStyle
+      else {}
   },
 
   AddForegroundStyle(newButtonForegroundStyle):
@@ -450,6 +463,7 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
   root {
     [root.name]+:
       if hasForegroundName then
+        assert std.type(foregroundName) == 'array' : 'foregroundStyleName 必须是数组，当前为' + foregroundName;
         { foregroundStyle: foregroundName }
       else
         { foregroundStyle: [root.name + 'ForegroundStyle'], },
@@ -602,7 +616,7 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
             local findSelectedIndex =
               local findIndex(arr, idx) =
               if idx >= std.length(arr) then
-                0 // 默认选中第一个
+                std.floor(std.length(arr) / 2) // 默认选中间那一项
               else if std.objectHas(arr[idx], 'selected') && arr[idx].selected == true then
                 idx
               else
