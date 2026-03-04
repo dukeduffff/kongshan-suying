@@ -18,6 +18,14 @@ local KeyboardType = {
   Temp26Key: 2,
 };
 
+local getSwitchButton(keyboardType) =
+  if keyboardType == KeyboardType.English then
+    commonButtons.pinyinButton
+  else if keyboardType == KeyboardType.Temp26Key then
+    commonButtons.goBackButton
+  else
+    commonButtons.alphabeticButton;
+
 // 标准26键布局
 local getRows(keyboardType) = [
   [
@@ -58,9 +66,7 @@ local getRows(keyboardType) = [
     commonButtons.numericButton,
     commonButtons.commaButton,
     commonButtons.spaceButton,
-    if keyboardType == KeyboardType.English then commonButtons.pinyinButton
-    else if keyboardType == KeyboardType.Temp26Key then commonButtons.goBackButton
-    else commonButtons.alphabeticButton,
+    getSwitchButton(keyboardType),
     commonButtons.enterButton,
   ],
 ];
@@ -179,40 +185,23 @@ local newKeyLayout(isDark=false, isPortrait=true, keyboardType=KeyboardType.Chin
     {
       foregroundStyleName: basicStyle.spaceButtonForegroundStyle,
       foregroundStyle: basicStyle.newSpaceButtonRimeSchemaForegroundStyle(
-		if keyboardType == KeyboardType.English then
-		  'English'
-		else if keyboardType == KeyboardType.Temp26Key then
-		  '临时中文'
-		else
-		  '$rimeSchemaName',
-		isDark),
+        if keyboardType == KeyboardType.English then
+          'English'
+        else if keyboardType == KeyboardType.Temp26Key then
+          '临时中文'
+        else
+          '$rimeSchemaName',
+        isDark),
     }
     + processButtonParams(keyboardType, commonButtons.spaceButton.params),
     needHint=false,
   )
-  +
-  (
-    if keyboardType == KeyboardType.English then
-      basicStyle.newSystemButton(
-        commonButtons.pinyinButton.name,
-        isDark,
-        portraitNormalButtonSize
-        + processButtonParams(keyboardType, commonButtons.pinyinButton.params)
-      )
-    else if keyboardType == KeyboardType.Temp26Key then
-      basicStyle.newSystemButton(
-        commonButtons.goBackButton.name,
-        isDark,
-        portraitNormalButtonSize
-        + commonButtons.goBackButton.params
-      )
-    else
-      basicStyle.newSystemButton(
-        commonButtons.alphabeticButton.name,
-        isDark,
-        portraitNormalButtonSize
-        + commonButtons.alphabeticButton.params
-      )
+  + local switchButton = getSwitchButton(keyboardType);
+    basicStyle.newSystemButton(
+    switchButton.name,
+    isDark,
+    portraitNormalButtonSize
+    + processButtonParams(keyboardType, switchButton.params)
   )
   + basicStyle.newColorButton(
     commonButtons.enterButton.name,
