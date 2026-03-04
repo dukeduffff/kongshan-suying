@@ -55,7 +55,10 @@ local settings = import '../Settings.libsonnet';
         text: settings.spaceButtonComposingText,
         fontSize: fonts.systemButtonTextFontSize,
 
-        swipeUp: { action: { shortcut: '#次选上屏' } },
+        swipeUp: {
+          action: { shortcut: '#次选上屏' },
+          text: '次选',
+        },
       },
     },
   },
@@ -112,7 +115,7 @@ local settings = import '../Settings.libsonnet';
       longPress: [
         {
           action: { shortcut: '#换行' },
-          systemImageName: 'paragraphsign',
+          systemImageName: 'return',
         },
       ],
 
@@ -264,8 +267,13 @@ local settings = import '../Settings.libsonnet';
   clearPreeditButton: {
     name: 'clearPreeditButton',
     params: {
-      action: { shortcut: '#重输' },
-      text: '重输',
+      action: { shortcut: '#换行' },
+      text: '换行',
+
+      whenPreeditChanged: {
+        action: { shortcut: '#重输' },
+        text: '重输',
+      },
     },
   },
 
