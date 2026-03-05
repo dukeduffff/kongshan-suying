@@ -94,7 +94,7 @@ local settings = import '../Settings.libsonnet';
 
       whenPreeditChanged: {
         action: settings.segmentAction,
-        // systemImageName: 'square.and.line.vertical.and.square',
+        systemImageName: 'square.and.line.vertical.and.square',
         text: '分词',
       },
     },
