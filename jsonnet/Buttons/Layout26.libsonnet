@@ -140,7 +140,11 @@ local settings = import '../Settings.libsonnet';
       action: { character: 'a' },
       uppercased: { action: { character: 'A' } },
       swipeUp: { action: { character: '!' } },
-      swipeDown: { action: { shortcut: '#selectText' }, text: '全' },
+      swipeDown: {
+        action: { shortcut: '#selectText' },
+        text: '全',
+        systemImageName: 'selection.pin.in.out',
+      },
       longPress: [
         { action: { character: 'A' }, selected: true },
         { action: { shortcut: '#左手模式' }, systemImageName: 'keyboard.onehanded.left' },
@@ -252,7 +256,11 @@ local settings = import '../Settings.libsonnet';
       action: { character: 'z' },
       uppercased: { action: { character: 'Z' } },
       swipeUp: { action: { character: '@' } },
-      swipeDown: { action: { shortcut: '#undo' }, text: '撤' },
+      swipeDown: {
+        action: { shortcut: '#undo' },
+        text: '撤',
+        systemImageName: 'arrow.uturn.left'
+      },
       longPress: [
         { action: { character: 'Z' } },
       ],
@@ -264,7 +272,11 @@ local settings = import '../Settings.libsonnet';
       action: { character: 'x' },
       uppercased: { action: { character: 'X' } },
       swipeUp: { action: { character: '*' } },
-      swipeDown: { action: { shortcut: '#cut' }, text: '剪' },
+      swipeDown: {
+        action: { shortcut: '#cut' },
+        text: '剪',
+        systemImageName: 'scissors'
+      },
       longPress: [
         { action: { character: 'X' } },
       ],
@@ -276,7 +288,11 @@ local settings = import '../Settings.libsonnet';
       action: { character: 'c' },
       uppercased: { action: { character: 'C' } },
       swipeUp: { action: { character: '%' } },
-      swipeDown: { action: { shortcut: '#copy' }, text: '复' },
+      swipeDown: {
+        action: { shortcut: '#copy' },
+        text: '复',
+        systemImageName: 'doc.on.doc'
+      },
       longPress: [
         { action: { character: 'C' } },
       ],
@@ -288,7 +304,11 @@ local settings = import '../Settings.libsonnet';
       action: { character: 'v' },
       uppercased: { action: { character: 'V' } },
       swipeUp: { action: { character: '=' } },
-      swipeDown: { action: { shortcut: '#paste' }, text: '贴' },
+      swipeDown: {
+        action: { shortcut: '#paste' },
+        text: '贴',
+        systemImageName: 'doc.on.clipboard'
+      },
       longPress: [
         { action: { character: 'V' } },
       ],

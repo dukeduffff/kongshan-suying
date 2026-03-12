@@ -47,7 +47,7 @@ local settings = import '../Settings.libsonnet';
       systemImageName: 'space',
       center: {x: 0.5, y: 0.5},
       notification:
-        (if settings.spaceButtonShowSchema then
+        (if settings.spaceButtonSchemaNameCenter != null then
           ['rimeSchemaChangedNotification']
         else []),
 
@@ -85,19 +85,7 @@ local settings = import '../Settings.libsonnet';
 
   shiftButton: {
     name: 'shiftButton',
-    params: {
-      systemImageName: 'shift',
-      action: 'shift',
-
-      uppercased: { systemImageName: 'shift.fill', },
-      capsLocked: { systemImageName: 'capslock.fill', },
-
-      whenPreeditChanged: {
-        action: settings.segmentAction,
-        // systemImageName: 'square.and.line.vertical.and.square',
-        text: '分词',
-      },
-    },
+    params: settings.shiftButtonParams,
   },
 
   enterButton: {
@@ -116,6 +104,7 @@ local settings = import '../Settings.libsonnet';
         {
           action: { shortcut: '#换行' },
           systemImageName: 'return',
+          text: '换行',
         },
       ],
 
@@ -158,6 +147,7 @@ local settings = import '../Settings.libsonnet';
     params: {
       action: 'returnPrimaryKeyboard',
       systemImageName: 'arrow.backward',
+      text: '返回',
     },
   },
 
@@ -173,7 +163,7 @@ local settings = import '../Settings.libsonnet';
     name: 'numericButton',
     params: {
       action: { keyboardType: 'numeric' },
-      text: '123',
+      text: if settings.preferIcon then '123' else '数字',
       swipeUp: { action: { keyboardType: 'symbolic' } },
       swipeDown: { action: { keyboardType: 'emojis' } },
     }
@@ -196,15 +186,7 @@ local settings = import '../Settings.libsonnet';
     name: 'symbolicButton',
     params: {
       action: { keyboardType: 'symbolic' },
-      text: '#+=',
-    },
-  },
-
-  segmentButton: {
-    name: 'segmentButton',
-    params: {
-      action: settings.segmentAction,
-      text: '分词',
+      text: if settings.preferIcon then '#+=' else '符号',
     },
   },
 

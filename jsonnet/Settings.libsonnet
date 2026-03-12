@@ -36,17 +36,14 @@
   iPad: false,
 
 
-  # 是否在空格键上显示方案名称
-  # true 显示方案名称，false 不显示
-  spaceButtonShowSchema: true,
-
-
-  # 方案名称在空格键上的位置，有的方案名称
-  # 较长，需要调整 x 值以免超出按键
-  spaceButtonSchemaNameCenter: {
-    x: 0.2,
-    y: 0.7
-  },
+  # 空格键方案名称显示位置
+  # x, y 取值范围为 [0, 1]
+  # x 值越小越靠左，y 值越小越靠上
+  # 特殊值 null 表示不显示方案名称
+  spaceButtonSchemaNameCenter:
+    { x: 0.2, y: 0.7 }, # 左下角
+    # { x: 0.5, y: 0.5 }, # 中间
+    # null,               # 不显示
 
 
   # 上下滑动提示文字显示位置
@@ -89,9 +86,9 @@
   },
 
 
-  # toolbar 按钮以图标显示
+  # 同时配了图标和文字的，优先显示图标还是文字
   # true 显示图标，false 显示文字
-  toolbarPreferIcon: true,
+  preferIcon: true,
 
 
   # 主题色
@@ -106,11 +103,24 @@
   uppercaseForChinese: false,
 
 
-  # 分词键，用于输入方案中分词使用
-  segmentAction:
-    # { character: '`'},
-    # 'tab',
-    { character: "'"},
+  # shiftButton 的功能定义
+  shiftButtonParams: {
+    systemImageName: 'shift',
+    action: 'shift',
+
+    uppercased: { systemImageName: 'shift.fill', },
+    capsLocked: { systemImageName: 'capslock.fill', },
+
+    whenPreeditChanged: {
+      action: { character: "'" },
+      systemImageName: 'square.and.line.vertical.and.square',
+      text: '分词',
+
+      # action: 'tab',
+      # systemImageName: 'arrow.right.to.line',
+      # text: 'Tab',
+    },
+  },
 
 
   # Rime 方案中的快符

@@ -42,21 +42,33 @@ local getKeyboardActionText(params={}, key='action', isUppercase=false) =
     {};
 
 // 按优先级生成样式
+// 此函数特别重要！错误地改动可能导致按键显示异常
+// 请勿随意改动此函数，除非你非常清楚自己在做什么
 local newStyleByPriority(isDark=false, params={}, highPriorityParams={}, systemImageParams={}, assetImageParams={}, textParams={}) =
   local tryAddTextInHighPriorityParams = getKeyboardActionText(highPriorityParams);
-  if std.objectHas(highPriorityParams, 'systemImageName') then
+  if std.objectHas(highPriorityParams, 'systemImageName') && settings.preferIcon then
     utils.newSystemImageStyle(systemImageParams + params + highPriorityParams, isDark)
   else if std.objectHas(highPriorityParams, 'assetImageName') then
     utils.newAssetImageStyle(assetImageParams + params + highPriorityParams, isDark)
   else if std.objectHas(tryAddTextInHighPriorityParams, 'text') then
     utils.newTextStyle(textParams + params + highPriorityParams + tryAddTextInHighPriorityParams, isDark)
+  else if std.objectHas(highPriorityParams, 'systemImageName') then
+    // 不喜欢 icon，但是按文本显示失败，再次尝试显示 icon
+    utils.newSystemImageStyle(systemImageParams + params + highPriorityParams, isDark)
 
-  else if std.objectHas(params, 'systemImageName') then
+  else if std.objectHas(params, 'systemImageName') && settings.preferIcon then
     utils.newSystemImageStyle(systemImageParams + params, isDark)
   else if std.objectHas(params, 'assetImageName') then
     utils.newAssetImageStyle(assetImageParams + params, isDark)
+  else if std.objectHas(getKeyboardActionText(params), 'text') then
+    utils.newTextStyle(textParams + params + getKeyboardActionText(params), isDark)
+  else if std.objectHas(params, 'systemImageName') then
+    // 不喜欢 icon，但是按文本显示失败，再次尝试显示 icon
+    utils.newSystemImageStyle(systemImageParams + params, isDark)
   else
-    utils.newTextStyle(textParams + params + getKeyboardActionText(params), isDark);
+    assert false : 'newStyleByPriority 生成样式失败，params 和 highPriorityParams 中缺乏必要的字段，当前参数为 params=' + std.toString(params) + '，highPriorityParams=' + std.toString(highPriorityParams);
+    {};
+
 // 通用键盘背景样式
 local keyboardBackgroundStyleName = 'keyboardBackgroundStyle';
 local newKeyboardBackgroundStyle(isDark=false, params={}) = {
@@ -276,34 +288,6 @@ local newSystemButtonForegroundStyle(isDark=false, params={}, highPriorityParams
     }
   );
 
-
-local spaceButtonRimeSchemaForegroundStyleName = 'spaceButtonRimeSchemaForegroundStyle';
-local newSpaceButtonRimeSchemaForegroundStyle(schemaNameText, isDark=false) =
-  if settings.spaceButtonShowSchema then
-  {
-    [spaceButtonRimeSchemaForegroundStyleName]: utils.newTextStyle({
-      text: schemaNameText,
-      fontSize: fonts.alternativeTextFontSize,
-      center: settings.spaceButtonSchemaNameCenter,
-      normalColor: colors.alternativeForegroundColor,
-      highlightColor: colors.alternativeHighlightedForegroundColor,
-    }, isDark),
-  }
-  else
-  {};
-
-local spaceButtonForegroundStyleName = 'spaceButtonForegroundStyle';
-local spaceButtonForegroundStyle = [
-  spaceButtonForegroundStyleName,
-]
-+ (
-  if settings.spaceButtonShowSchema then
-    [
-      spaceButtonRimeSchemaForegroundStyleName,
-    ]
-  else []
-  );
-
 // 彩色功能键按钮背景样式
 local colorButtonBackgroundStyleName = 'colorButtonBackgroundStyle';
 local newColorButtonBackgroundStyle(isDark=false, params={}) =
@@ -366,8 +350,7 @@ local newFloatingKeyboardButton(name, isDark=false, params={}) =
   };
 
 local newToolbarButtonForegroundStyle(isDark=false, params={}) =
-  local preferIcon = settings.toolbarPreferIcon;
-  if preferIcon && (std.objectHas(params, 'systemImageName') || std.objectHas(params, 'assetImageName')) then
+  if settings.preferIcon && std.objectHas(params, 'systemImageName') then
     utils.newSystemImageStyle({
     normalColor: colors.toolbarButtonForegroundColor,
     highlightColor: colors.toolbarButtonHighlightedForegroundColor,
@@ -380,7 +363,7 @@ local newToolbarButtonForegroundStyle(isDark=false, params={}) =
     fontSize: fonts.toolbarButtonTextFontSize,
   } + params + getKeyboardActionText(params), isDark)
   else
-    assert false : 'toolbar button 必须指定 systemImageName、assetImageName、text 或 action 中的一个';
+    assert false : 'toolbar button 必须指定 systemImageName、text 或 action 中的一个，当前参数为' + std.toString(params);
     {};
 
 local toolbarSlideButtonsName = 'toolbarSlideButtons';
@@ -432,6 +415,9 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
   type: type, // type 可选值： alphabetic, system, color
   isDark: isDark,
   params: params,
+
+  showSwipeUpText: true,
+  showSwipeDownText: true,
 
   [name]: {}, // 保存按钮相关信息
   reference: {},   // 按钮内的相关引用定义
@@ -490,12 +476,12 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
           + utils.newBackgroundStyle(style=alphabeticHintBackgroundStyleName)
           + utils.newForegroundStyle(style=hintForegroundStyleName)
           + (
-            if std.objectHas(param, 'swipeUp') then
+            if std.objectHas(param, 'swipeUp') && root.showSwipeUpText then
               utils.newForegroundStyle(styleName='swipeUpForegroundStyle', style=swipeUpHintForegroundStyleName)
             else {}
           )
           + (
-            if std.objectHas(param, 'swipeDown') then
+            if std.objectHas(param, 'swipeDown') && root.showSwipeDownText then
               utils.newForegroundStyle(styleName='swipeDownForegroundStyle', style=swipeDownHintForegroundStyleName)
             else {}
           ),
@@ -532,10 +518,13 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
   AddSwipeUp(showSwipeText):
     local hasSwipeUpParams = std.objectHas(root.params, 'swipeUp');
     if !hasSwipeUpParams then
-      root
+      root {
+        showSwipeUpText: showSwipeText,
+      }
     else
       local swipeUpParams = if hasSwipeUpParams then root.params.swipeUp else {};
       root {
+        showSwipeUpText: showSwipeText,
         [root.name]+: {
             [if std.objectHas(swipeUpParams, 'action') then 'swipeUpAction']: swipeUpParams.action,
             [if showSwipeText then 'foregroundStyle']+: [generateSwipeForegroundStyleName(root.name, 'Up')],
@@ -549,10 +538,13 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
   AddSwipeDown(showSwipeText):
     local hasSwipeDownParams = std.objectHas(root.params, 'swipeDown');
     if !hasSwipeDownParams then
-      root
+      root {
+        showSwipeDownText: showSwipeText,
+      }
     else
       local swipeDownParams = if hasSwipeDownParams then root.params.swipeDown else {};
       root {
+        showSwipeDownText: showSwipeText,
         [root.name]+: {
             [if std.objectHas(swipeDownParams, 'action') then 'swipeDownAction']: swipeDownParams.action,
             [if showSwipeText then 'foregroundStyle']+: [generateSwipeForegroundStyleName(root.name, 'Down')],
@@ -681,11 +673,11 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
           foregroundStyle: [
             root.name + 'PreeditChangedForegroundStyle',
           ] + (
-            if std.objectHas(preeditChangedParams, 'swipeUp') then
+            if std.objectHas(preeditChangedParams, 'swipeUp') && root.showSwipeUpText then
               [generateSwipeForegroundStyleName(root.name, 'Up', 'PreeditChanged')]
             else []
           ) + (
-            if std.objectHas(preeditChangedParams, 'swipeDown') then
+            if std.objectHas(preeditChangedParams, 'swipeDown') && root.showSwipeDownText then
               [generateSwipeForegroundStyleName(root.name, 'Down', 'PreeditChanged')]
             else []
           ),
@@ -706,8 +698,8 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
           root.CreateHintStyleReference(root.name + 'PreeditChangedHintStyle', preeditChangedParams)
         else {}
       ) + {
-        [if std.objectHas(preeditChangedParams, 'swipeUp') then generateSwipeForegroundStyleName(root.name, 'Up', 'PreeditChanged')]: newAlphabeticButtonAlternativeForegroundStyle(root.isDark, { center: swipeUpTextCenter }, preeditChangedParams.swipeUp),
-        [if std.objectHas(preeditChangedParams, 'swipeDown') then generateSwipeForegroundStyleName(root.name, 'Down', 'PreeditChanged')]: newAlphabeticButtonAlternativeForegroundStyle(root.isDark, { center: swipeDownTextCenter }, preeditChangedParams.swipeDown),
+        [if std.objectHas(preeditChangedParams, 'swipeUp') && root.showSwipeUpText then generateSwipeForegroundStyleName(root.name, 'Up', 'PreeditChanged')]: newAlphabeticButtonAlternativeForegroundStyle(root.isDark, { center: swipeUpTextCenter }, preeditChangedParams.swipeUp),
+        [if std.objectHas(preeditChangedParams, 'swipeDown') && root.showSwipeDownText then generateSwipeForegroundStyleName(root.name, 'Down', 'PreeditChanged')]: newAlphabeticButtonAlternativeForegroundStyle(root.isDark, { center: swipeDownTextCenter }, preeditChangedParams.swipeDown),
       },
     },
 
@@ -740,8 +732,8 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
             oldForegroundStyle,
             {
               [root.name + 'ForegroundStyle']: root.name + 'KeyboardAction'+i+'ForegroundStyle',
-              [if std.objectHas(keyboardActionParams[i], 'swipeUp') then generateSwipeForegroundStyleName(root.name, 'Up')]: generateSwipeForegroundStyleName(root.name, 'Up', 'KeyboardAction'+i),
-              [if std.objectHas(keyboardActionParams[i], 'swipeDown') then generateSwipeForegroundStyleName(root.name, 'Down')]: generateSwipeForegroundStyleName(root.name, 'Down', 'KeyboardAction'+i),
+              [if std.objectHas(keyboardActionParams[i], 'swipeUp') && root.showSwipeUpText then generateSwipeForegroundStyleName(root.name, 'Up')]: generateSwipeForegroundStyleName(root.name, 'Up', 'KeyboardAction'+i),
+              [if std.objectHas(keyboardActionParams[i], 'swipeDown') && root.showSwipeDownText then generateSwipeForegroundStyleName(root.name, 'Down')]: generateSwipeForegroundStyleName(root.name, 'Down', 'KeyboardAction'+i),
             }
           ),
           [if std.objectHas(keyboardActionParams[i], 'swipeUp') && std.objectHas(keyboardActionParams[i].swipeUp, 'action') then 'swipeUpAction']: keyboardActionParams[i].swipeUp.action,
@@ -798,8 +790,8 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
         oldForegroundStyle,
         {
           [root.name + 'ForegroundStyle']: utils.rimeOptionChangedForegroundStyleName(root.name, rimeOptionName, rimeOptionValue),
-          [if std.objectHas(rimeOptionParams, 'swipeUp') then generateSwipeForegroundStyleName(root.name, 'Up')]: generateSwipeForegroundStyleName(root.name, 'Up', rimeOptionStr),
-          [if std.objectHas(rimeOptionParams, 'swipeDown') then generateSwipeForegroundStyleName(root.name, 'Down')]: generateSwipeForegroundStyleName(root.name, 'Down', rimeOptionStr),
+          [if std.objectHas(rimeOptionParams, 'swipeUp') && root.showSwipeUpText then generateSwipeForegroundStyleName(root.name, 'Up')]: generateSwipeForegroundStyleName(root.name, 'Up', rimeOptionStr),
+          [if std.objectHas(rimeOptionParams, 'swipeDown') && root.showSwipeDownText then generateSwipeForegroundStyleName(root.name, 'Down')]: generateSwipeForegroundStyleName(root.name, 'Down', rimeOptionStr),
         }
       );
       local needUpdateHintStyle = std.objectHas(root[root.name], 'hintStyle');
@@ -835,8 +827,8 @@ local newButton(name, type='alphabetic', isDark=false, params={}) =
           [utils.rimeOptionChangedForegroundStyleName(root.name, rimeOptionName, rimeOptionValue)]: newAlphabeticButtonForegroundStyle(root.isDark, root.params, rimeOptionParams),
         }
         + {
-          [if std.objectHas(rimeOptionParams, 'swipeUp') then generateSwipeForegroundStyleName(root.name, 'Up', rimeOptionStr)]: newAlphabeticButtonAlternativeForegroundStyle(root.isDark, { center: swipeUpTextCenter }, rimeOptionParams.swipeUp),
-          [if std.objectHas(rimeOptionParams, 'swipeDown') then generateSwipeForegroundStyleName(root.name, 'Down', rimeOptionStr)]: newAlphabeticButtonAlternativeForegroundStyle(root.isDark, { center: swipeDownTextCenter }, rimeOptionParams.swipeDown),
+          [if std.objectHas(rimeOptionParams, 'swipeUp') && root.showSwipeUpText then generateSwipeForegroundStyleName(root.name, 'Up', rimeOptionStr)]: newAlphabeticButtonAlternativeForegroundStyle(root.isDark, { center: swipeUpTextCenter }, rimeOptionParams.swipeUp),
+          [if std.objectHas(rimeOptionParams, 'swipeDown') && root.showSwipeDownText then generateSwipeForegroundStyleName(root.name, 'Down', rimeOptionStr)]: newAlphabeticButtonAlternativeForegroundStyle(root.isDark, { center: swipeDownTextCenter }, rimeOptionParams.swipeDown),
         } + (
           if needUpdateHintStyle then
             root.CreateHintStyleReference(root.name + rimeOptionStr + 'HintStyle', root.params + rimeOptionParams)
@@ -856,7 +848,7 @@ local newToolbarButton(name, isDark=false, params={}) =
     .AddRimeOptionChangeEvent();
   button.GetButton() + button.reference;
 
-local newAlphabeticButton(name, isDark=false, params={}, needHint=true, swipeTextFollowSetting=false) =
+local newAlphabeticButton(name, isDark=false, params={}, needHint=true, swipeTextFollowSetting=true) =
   local button = newButton(name, 'alphabetic', isDark, params)
     .AddBackgroundStyle()
     .AddForegroundStyle(newAlphabeticButtonForegroundStyle)
@@ -903,33 +895,59 @@ local newColorButton(name, isDark=false, params={}) =
     .AddRimeOptionChangeEvent();
   button.GetButton() + button.reference;
 
-local newSymbolicCollection(name, isDark=false, params={}) =
+
+local spaceButtonRimeSchemaForegroundStyleName = 'spaceButtonRimeSchemaForegroundStyle';
+local newSpaceButtonRimeSchemaForegroundStyle(schemaNameText, isDark=false) =
   {
-    [name]: utils.newBackgroundStyle(style=systemButtonBackgroundStyleName)
-            + { cellStyle: name + 'CellStyle' }
-            + utils.extractProperties(
-              params,
-              [
-                'type',
-                'size',
-                'insets',
-                'dataSource',
-              ]
-            ),
-    [name + 'CellStyle']:
-            // utils.newBackgroundStyle(style=systemButtonBackgroundStyleName)+
-            utils.newForegroundStyle(style=name + 'CellForegroundStyle'),
-    [name + 'CellForegroundStyle']: utils.newTextStyle({
-      normalColor: colors.systemButtonForegroundColor,
-      highlightColor: colors.systemButtonHighlightedForegroundColor,
-      fontSize: fonts.numericCollectionTextFontSize,
-    } + params, isDark),
+    [spaceButtonRimeSchemaForegroundStyleName]: utils.newTextStyle({
+      text: schemaNameText,
+      fontSize: fonts.alternativeTextFontSize,
+      center: settings.spaceButtonSchemaNameCenter,
+      normalColor: colors.alternativeForegroundColor,
+      highlightColor: colors.alternativeHighlightedForegroundColor,
+    }, isDark),
   };
 
+local showSchemaName = settings.spaceButtonSchemaNameCenter != null;
+local showSchemaNameAtCenter = utils.normalizeCenter(settings.spaceButtonSchemaNameCenter) == utils.normalizeCenter({}); // 特殊处理显示在中间的，直接将其显示在空格文本上，不用额外增加一个前景样式
+local needCornerSchemaName = showSchemaName && !showSchemaNameAtCenter;
+
+local spaceButtonForegroundStyleName = 'spaceButtonForegroundStyle';
+local spaceButtonForegroundStyle = [
+  spaceButtonForegroundStyleName,
+]
++ (
+  if needCornerSchemaName then [
+    spaceButtonRimeSchemaForegroundStyleName,
+  ]
+  else []
+  );
+
+local newSpaceButtonForegroundStyle(params, schemaNameText, isDark=false) =
+  std.mergePatch(params,
+    if needCornerSchemaName then {
+      foregroundStyleName: spaceButtonForegroundStyle,
+
+      foregroundStyle: {
+        [spaceButtonRimeSchemaForegroundStyleName]: utils.newTextStyle({
+          text: schemaNameText,
+          fontSize: fonts.alternativeTextFontSize,
+          center: settings.spaceButtonSchemaNameCenter,
+          normalColor: colors.alternativeForegroundColor,
+          highlightColor: colors.alternativeHighlightedForegroundColor,
+        }, isDark),
+      },
+    }
+    else if showSchemaName then {
+      text: schemaNameText,
+      systemImageName: null,
+      fontSize: fonts.systemButtonTextFontSize,
+    }
+    else {});
 
 local rimeSchemaChangedNotification =
   {
-    [if settings.spaceButtonShowSchema then 'rimeSchemaChangedNotification']: {
+    [if settings.spaceButtonSchemaNameCenter != null then 'rimeSchemaChangedNotification']: {
       notificationType: 'rime',
       rimeNotificationType: 'schemaChanged',
       backgroundStyle: alphabeticButtonBackgroundStyleName,
@@ -990,10 +1008,8 @@ local returnKeyTypeChangedNotification =
   newSystemButton: newSystemButton,
   newColorButton: newColorButton,
 
-  newSymbolicCollection: newSymbolicCollection,
-
   spaceButtonForegroundStyle: spaceButtonForegroundStyle,
-  newSpaceButtonRimeSchemaForegroundStyle: newSpaceButtonRimeSchemaForegroundStyle,
+  newSpaceButtonForegroundStyle: newSpaceButtonForegroundStyle,
 
   // notification
   rimeSchemaChangedNotification: rimeSchemaChangedNotification,
