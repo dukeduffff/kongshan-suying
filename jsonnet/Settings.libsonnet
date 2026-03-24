@@ -13,6 +13,7 @@
   # 17 : 17键布局
   # 18 : 18键布局
   # bopomofo : 注音佈局
+  # sigma : 西戈拼音布局
   keyboardLayout: '26',
 
 
